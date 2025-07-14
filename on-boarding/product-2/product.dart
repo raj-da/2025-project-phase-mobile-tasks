@@ -1,31 +1,18 @@
 class Product {
-  String _name;
+  String _productName;
   String _description;
   double _price;
 
-  Product(this._name, this._description, this._price);
+  Product(this._productName, this._description, this._price);
 
-  String getName() {
-    return this._name;
-  }
+  // setting up getters
+  String get name => _productName;
+  String get description => _description;
+  double get price => _price;
 
-  String getDescription() {
-    return this._description;
-  }
+  // setting up setters
+  set setName(String productName) => _productName = productName;
+  set setDescription(String description) => _description = description;
+  set setPrice(double price) => _price = price;
 
-  double getPrice() {
-    return this._price;
-  }
-
-  void setName(String name) {
-    this._name = name;
-  }
-
-  void setDescription(String description) {
-    this._description = description;
-  }
-
-  void setPrice(double price) {
-    this._price = price;
-  }
 }

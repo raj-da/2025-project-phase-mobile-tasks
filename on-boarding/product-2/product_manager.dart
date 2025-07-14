@@ -27,9 +27,9 @@ class ProductManager {
   void viewProducts() {
     if (_products.length > 0) {
       for (Product product in _products.values) {
-        print("Product Name: ${product.getName()}");
-        print("Product Description: ${product.getDescription()}");
-        print("Product Price: ${product.getPrice()}");
+        print("Product Name: ${product.name}");
+        print("Product Description: ${product.description}");
+        print("Product Price: ${product.price}");
       }
     } else {
       print("No products Available");
@@ -40,9 +40,9 @@ class ProductManager {
   void viewProduct(String name) {
     if (_products.containsKey(name)) {
       Product product = _products[name]!;
-      print("Product Name: ${product.getName()}");
-      print("Product Description: ${product.getDescription()}");
-      print("Product Price: ${product.getPrice()}");
+      print("Product Name: ${product.name}");
+      print("Product Description: ${product.description}");
+      print("Product Price: ${product.price}");
     } else {
       print("No such product exists!");
     }
@@ -57,16 +57,16 @@ class ProductManager {
   }) {
     if (_products.containsKey(prevName)) {
       Product product = _products[prevName]!;
-      product.setName(name);
-      product.setDescription(description);
-      product.setPrice(price);
+      product.setName = name;
+      product.setDescription = description;
+      product.setPrice = price;
       _products[name] = product;
       _products.remove(prevName);
 
       print("Updated profile: ");
-      print("Product Name: ${product.getName()}");
-      print("Product Description: ${product.getDescription()}");
-      print("Product Price: ${product.getPrice()}");
+      print("Product Name: ${product.name}");
+      print("Product Description: ${product.description}");
+      print("Product Price: ${product.price}");
     } else {
       print("No product with name $prevName exists");
     }
