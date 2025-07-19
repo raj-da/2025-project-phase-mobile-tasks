@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import '../widgets/text.dart'; // For custom inputs
+import '../widgets/buttons.dart';
+
+// value variables
+const double pagePadding = 24.0;
 
 class AddUpdatePage extends StatefulWidget {
   const AddUpdatePage({super.key});
@@ -10,154 +15,95 @@ class AddUpdatePage extends StatefulWidget {
 class _AddUpdatePageState extends State<AddUpdatePage> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(leading: Icon(Icons.arrow_back),title: Center(child: Text("Add Product"))),
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        leading: Icon(Icons.arrow_back_ios_new, color: Colors.deepPurple),
+        title: Text("Add Product"),
+      ),
 
-        body: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                SingleChildScrollView(
-                  child: Form(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          width: double.infinity,
-                          height: 200,
-                          decoration: BoxDecoration(
-                            color: Color(0xFFF1F0F0),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.image, size: 50, color: Colors.grey),
-                                SizedBox(height: 10),
-                                Text(
-                                  "Upload Image",
-                                  style: TextStyle(color: Colors.grey),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+      body: Padding(
+        padding: const EdgeInsets.all(pagePadding),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SingleChildScrollView(
+                child: Form(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Input Field Input
+                      imageInputField(),
 
-                        // name input
-                        Text("name", style: TextStyle(fontSize: 20)),
-                        TextFormField(
-                          decoration: InputDecoration(
-                            enabledBorder: InputBorder.none,
-                            // enabledBorder: OutlineInputBorder(
-                            //   borderSide: BorderSide(color: Colors.orange),
-                            //   borderRadius: BorderRadius.circular(10),
-                            // ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            // border: OutlineInputBorder(
-                            //   borderRadius: BorderRadius.circular(10),
-                            // ),
-                            // label: Text("name"),
-                            filled: true,
-                            fillColor: const Color.fromARGB(255, 241, 240, 240),
-                          ),
-                        ),
+                      // name input
+                      customText(text: "name", size: 20),
+                      textInput(),
 
-                        // category input
-                        Text("category", style: TextStyle(fontSize: 20)),
-                        TextFormField(
-                          decoration: InputDecoration(
-                            enabledBorder: InputBorder.none,
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
+                      // category input
+                      customText(text: "category", size: 20),
+                      textInput(),
 
-                            filled: true,
-                            fillColor: const Color.fromARGB(255, 241, 240, 240),
-                          ),
-                        ),
+                      // price input
+                       customText(text: "price", size: 20),
+                      textInput(),
 
-                        // price input
-                        Text("price", style: TextStyle(fontSize: 20)),
-                        TextFormField(
-                          decoration: InputDecoration(
-                            enabledBorder: InputBorder.none,
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-
-                            filled: true,
-                            fillColor: const Color.fromARGB(255, 241, 240, 240),
-                          ),
-                        ),
-
-                        // description input
-                        Text("description", style: TextStyle(fontSize: 20)),
-                        TextFormField(
-                          maxLines: 7,
-                          decoration: InputDecoration(
-                            enabledBorder: InputBorder.none,
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-
-                            filled: true,
-                            fillColor: const Color.fromARGB(255, 241, 240, 240),
-                          ),
-                        ),
-                      ],
-                    ),
+                      // description input
+                       customText(text: "description", size: 20),
+                      textInput(maxLines: 7),
+                    ],
                   ),
                 ),
+              ),
 
-                SizedBox(height: 20),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      debugPrint("Add Pressed");
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.deepPurple,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    child: Text("ADD", style: TextStyle(color: Colors.white)),
-                  ),
-                ),
-
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      debugPrint("DELETE Pressed");
-                    },
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      side: const BorderSide(
-                        // width: 5.0,
-                        color: Colors.red,
-                      ),
-                    ),
-                    child: Text("DELETE", style: TextStyle(color: Colors.red)),
-                  ),
-                ),
-              ],
-            ),
+              const SizedBox(height: 20),
+              addUpdateButton(buttonTitle: "ADD"),
+              deleteButton(buttonTitle: "DELETE"),
+            ],
           ),
         ),
       ),
     );
   }
+}
+
+// Image input field
+Widget imageInputField() {
+  return Container(
+    width: double.infinity,
+    height: 200,
+    decoration: BoxDecoration(
+      color: Color(0xFFF1F0F0),
+      borderRadius: BorderRadius.circular(10),
+    ),
+    child: Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.image, size: 50, color: Colors.grey),
+          SizedBox(height: 10),
+          Text("Upload Image", style: TextStyle(color: Colors.grey)),
+        ],
+      ),
+    ),
+  );
+}
+
+// TextFormField Function
+Widget textInput({int maxLines = 1, String hintText = ""}) {
+  return TextFormField(
+    maxLines: maxLines,
+    decoration: InputDecoration(
+      hintText: hintText,
+      enabledBorder: InputBorder.none,
+      focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.white),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12)
+      ),
+      filled: true,
+      fillColor: const Color.fromARGB(255, 241, 240, 240),
+    ),
+  );
 }
