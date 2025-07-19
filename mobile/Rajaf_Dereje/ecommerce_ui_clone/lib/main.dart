@@ -1,10 +1,11 @@
 import 'package:ecommerce_ui_clone/pages/add_update_page.dart';
 import 'package:ecommerce_ui_clone/pages/details_page.dart';
 import 'package:ecommerce_ui_clone/pages/home_page.dart';
+import 'package:ecommerce_ui_clone/pages/search_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(DetailsPage());
+  runApp(SearchPage());
 }
 
 class MyApp extends StatelessWidget {
