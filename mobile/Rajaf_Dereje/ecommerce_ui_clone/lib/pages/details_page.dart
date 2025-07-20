@@ -39,6 +39,7 @@ class _DetailsPageState extends State<DetailsPage> {
                   top: 18.0,
                   left: 18.0,
                   child: circleIcon(
+                    context: context,
                     icon: Icons.arrow_back_ios_new,
                     borderColor: Colors.white,
                     iconColor: const Color.fromARGB(255, 11, 114, 199),

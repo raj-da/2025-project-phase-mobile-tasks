@@ -20,9 +20,9 @@ Widget squareIcon({
   );
 }
 
-
 Widget circleIcon({
   required IconData icon,
+  required BuildContext context,
   Color iconColor = Colors.grey,
   Color borderColor = Colors.grey,
   Color backGroundColor = Colors.white,
@@ -36,7 +36,7 @@ Widget circleIcon({
     ),
     child: IconButton(
       onPressed: () {
-        debugPrint("Back arrow Icon");
+        Navigator.pop(context);
       },
       icon: Icon(icon, color: iconColor, size: size),
     ),

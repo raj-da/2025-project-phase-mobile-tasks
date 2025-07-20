@@ -1,7 +1,6 @@
 import 'package:ecommerce_ui_clone/pages/add_update_page.dart';
 import 'package:ecommerce_ui_clone/pages/details_page.dart';
 import 'package:ecommerce_ui_clone/pages/home_page.dart';
-import 'package:ecommerce_ui_clone/pages/search_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -15,7 +14,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: DetailsPage(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const HomePage(),
+        '/addUpdate': (context) => const AddUpdatePage(),
+        '/details': (context) => const DetailsPage(),
+      },
       debugShowCheckedModeBanner: false,
     );
   }

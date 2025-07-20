@@ -55,9 +55,9 @@ class _SearchPageState extends State<SearchPage> {
               const SizedBox(height: 20),
 
               // Product Card
-              card(),
+              card(context),
               const SizedBox(height: 20),
-              card(),
+              card(context),
               const SizedBox(height: 20),
 
               // Filter section

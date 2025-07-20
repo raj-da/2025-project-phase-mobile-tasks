@@ -83,21 +83,23 @@ class _HomePageState extends State<HomePage> {
             SizedBox(height: 20),
     
             // item cards
-            card(),
+            card(context),
             const SizedBox(height: 8),
-            card(),
+            card(context),
             const SizedBox(height: 8),
-            card(),
+            card(context),
             const SizedBox(height: 8),
-            card(),
+            card(context),
             const SizedBox(height: 8),
-            card(),
+            card(context),
             const SizedBox(height: 8),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => debugPrint("floating button"),
+        onPressed: () => {
+          Navigator.pushNamed(context, '/addUpdate')
+        },
         shape: CircleBorder(),
         backgroundColor: Colors.deepPurple,
         child: const Icon(Icons.add, color: Colors.white, size: 30.0),

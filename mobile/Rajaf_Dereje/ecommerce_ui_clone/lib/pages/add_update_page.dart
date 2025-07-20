@@ -18,7 +18,7 @@ class _AddUpdatePageState extends State<AddUpdatePage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        leading: Icon(Icons.arrow_back_ios_new, color: Colors.deepPurple),
+        // leading: Icon(Icons.arrow_back_ios_new, color: Colors.deepPurple),
         title: Text("Add Product"),
       ),
 
