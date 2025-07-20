@@ -1,16 +1,15 @@
-# ecommerce_ui_clone
+## Ecommerce App Ui Clone
 
-A new Flutter project.
+### Home Page
+![Homepage](./screenshots/homepage.jpg)
 
-## Getting Started
+### Deatils page
+![detail1](./screenshots/detail1.jpg)
+![detail2](./screenshots/detail2.jpg)
 
-This project is a starting point for a Flutter application.
+### Add/Update form page
+![add/update](./screenshots/form.jpg)
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Search page
+![search](./screenshots/search1.jpg)
+![search2](./screenshots/search2.jpg)
