@@ -81,7 +81,10 @@ class _AddUpdatePageState extends State<AddUpdatePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Input Field Input
-                    imageInputField(selectedImage: _selectedImage, ontap: _pickImage),
+                    imageInputField(
+                      selectedImage: _selectedImage,
+                      ontap: _pickImage,
+                    ),
 
                     // name input
                     customText(text: "name", size: 20),
@@ -106,14 +109,22 @@ class _AddUpdatePageState extends State<AddUpdatePage> {
               addUpdateButton(
                 buttonTitle: "ADD",
                 onpressed: () {
-                  if (_formKey.currentState!.validate()) {
+                  if (_formKey.currentState!.validate() &&
+                      _selectedImage != null) {
                     final newProduct = Product(
                       name: _productName.text,
                       price: _productPrice.text,
                       category: _productCategory.text,
                       description: _productDescription.text,
+                      image: _selectedImage!,
                     );
                     Navigator.pop(context, newProduct);
+                  } else {
+                    // To do: give an alert messege that image should be selected
+                    debugPrint(
+                      "##########################################################",
+                    );
+                    debugPrint("Image should be selected");
                   }
                 },
               ),

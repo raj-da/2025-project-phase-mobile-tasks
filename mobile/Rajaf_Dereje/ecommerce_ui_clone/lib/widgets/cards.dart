@@ -15,12 +15,20 @@ Widget card(BuildContext context, {required Product product}) {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-              child: Image.network(
-                "https://fastly.picsum.photos/id/0/5000/3333.jpg?hmac=_j6ghY5fCfSD6tvtcV74zXivkJSPIfR9B8w34XeQmvU",
+              child: Image.file(
+                product.image,
                 width: double.infinity,
                 height: 200,
                 fit: BoxFit.cover,
               ),
+
+              // place holder image
+              // child: Image.network(
+              //   "https://fastly.picsum.photos/id/0/5000/3333.jpg?hmac=_j6ghY5fCfSD6tvtcV74zXivkJSPIfR9B8w34XeQmvU",
+              //   width: double.infinity,
+              //   height: 200,
+              //   fit: BoxFit.cover,
+              // ),
             ),
 
             Padding(
