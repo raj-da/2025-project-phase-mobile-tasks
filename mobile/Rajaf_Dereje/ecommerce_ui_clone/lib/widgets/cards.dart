@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import '../constants/product_model.dart';
 import 'text.dart';
 
-Widget card(BuildContext context) {
+Widget card(BuildContext context, {required Product product}) {
   return GestureDetector(
     onTap: () {
       Navigator.pushNamed(context, '/details');
@@ -14,12 +15,20 @@ Widget card(BuildContext context) {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-              child: Image.network(
-                "https://fastly.picsum.photos/id/0/5000/3333.jpg?hmac=_j6ghY5fCfSD6tvtcV74zXivkJSPIfR9B8w34XeQmvU",
+              child: Image.file(
+                product.image,
                 width: double.infinity,
                 height: 200,
                 fit: BoxFit.cover,
               ),
+
+              // place holder image
+              // child: Image.network(
+              //   "https://fastly.picsum.photos/id/0/5000/3333.jpg?hmac=_j6ghY5fCfSD6tvtcV74zXivkJSPIfR9B8w34XeQmvU",
+              //   width: double.infinity,
+              //   height: 200,
+              //   fit: BoxFit.cover,
+              // ),
             ),
 
             Padding(
@@ -30,12 +39,12 @@ Widget card(BuildContext context) {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       customText(
-                        text: "MacAir Pro Laptop",
+                        text: product.name,
                         size: 28,
                         color: Color.fromARGB(255, 96, 94, 94),
                       ),
                       customText(
-                        text: "\$800",
+                        text: "\$${product.price}",
                         size: 22,
                         color: Color.fromARGB(255, 96, 94, 94),
                       ),

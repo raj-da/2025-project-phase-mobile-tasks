@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 Widget addUpdateButton({
   required String buttonTitle,
+  required VoidCallback onpressed,
   Color color = Colors.deepPurple,
   double radius = 12.0,
   Color textColor = Colors.white,
@@ -9,9 +10,7 @@ Widget addUpdateButton({
   return SizedBox(
     width: double.infinity,
     child: ElevatedButton(
-      onPressed: () {
-        debugPrint("Add Pressed");
-      },
+      onPressed: onpressed,
       style: ElevatedButton.styleFrom(
         backgroundColor: color,
         shape: RoundedRectangleBorder(
@@ -25,15 +24,14 @@ Widget addUpdateButton({
 
 Widget deleteButton({
   required String buttonTitle,
+  required VoidCallback onpressed,
   double radius = 12.0,
   Color textColor = Colors.red,
 }) {
   return SizedBox(
     width: double.infinity,
     child: ElevatedButton(
-      onPressed: () {
-        debugPrint("DELETE Pressed");
-      },
+      onPressed: onpressed,
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         side: const BorderSide(
