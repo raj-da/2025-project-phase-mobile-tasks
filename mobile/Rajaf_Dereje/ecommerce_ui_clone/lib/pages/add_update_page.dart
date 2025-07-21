@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+import '../constants/product_model.dart';
 import '../widgets/text.dart'; // For custom inputs
 import '../widgets/buttons.dart';
-import '../constants/product_model.dart';
 
 // value variables
 const double pagePadding = 24.0;
@@ -23,12 +25,31 @@ class _AddUpdatePageState extends State<AddUpdatePage> {
   final _productCategory = TextEditingController();
   final _productDescription = TextEditingController();
 
+  // To store the selected image file
+  File? _selectedImage;
+
   // for clearing the form data
   void clearForm() {
     _productName.clear();
     _productPrice.clear();
     _productCategory.clear();
     _productDescription.clear();
+    setState(() {
+      _selectedImage = null;
+    });
+  }
+
+  // Method to pick an image from the gallery
+  Future<void> _pickImage() async {
+    final pickedFile = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+    );
+
+    if (pickedFile != null) {
+      setState(() {
+        _selectedImage = File(pickedFile.path);
+      });
+    }
   }
 
   @override
@@ -60,7 +81,7 @@ class _AddUpdatePageState extends State<AddUpdatePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Input Field Input
-                    imageInputField(),
+                    imageInputField(selectedImage: _selectedImage, ontap: _pickImage),
 
                     // name input
                     customText(text: "name", size: 20),
@@ -113,23 +134,37 @@ class _AddUpdatePageState extends State<AddUpdatePage> {
 }
 
 // Image input field
-Widget imageInputField() {
-  return Container(
-    width: double.infinity,
-    height: 200,
-    decoration: BoxDecoration(
-      color: Color(0xFFF1F0F0),
-      borderRadius: BorderRadius.circular(10),
-    ),
-    child: Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.image, size: 50, color: Colors.grey),
-          SizedBox(height: 10),
-          Text("Upload Image", style: TextStyle(color: Colors.grey)),
-        ],
+Widget imageInputField({
+  required File? selectedImage,
+  required VoidCallback ontap,
+}) {
+  return GestureDetector(
+    onTap: ontap,
+    child: Container(
+      width: double.infinity,
+      height: 200,
+      decoration: BoxDecoration(
+        color: Color(0xFFF1F0F0),
+        borderRadius: BorderRadius.circular(10),
+        image: selectedImage != null
+            ? DecorationImage(
+                image: FileImage(selectedImage),
+                fit: BoxFit.cover,
+              )
+            : null,
       ),
+      child: selectedImage == null
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.image, size: 50, color: Colors.grey),
+                  SizedBox(height: 10),
+                  Text("Upload Image", style: TextStyle(color: Colors.grey)),
+                ],
+              ),
+            )
+          : null, // Don't show the icon and text when an image is selected
     ),
   );
 }
