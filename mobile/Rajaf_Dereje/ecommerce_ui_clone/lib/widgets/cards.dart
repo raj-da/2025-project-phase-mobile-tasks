@@ -5,7 +5,7 @@ import 'text.dart';
 Widget card(BuildContext context, {required Product product}) {
   return GestureDetector(
     onTap: () {
-      Navigator.pushNamed(context, '/details');
+      Navigator.pushNamed(context, '/details', arguments: product);
     },
     child: SizedBox(
       child: Card(
