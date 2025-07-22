@@ -28,6 +28,28 @@ class _AddUpdatePageState extends State<AddUpdatePage> {
   // To store the selected image file
   File? _selectedImage;
 
+  Product? productToEdit;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    // Only set once
+    productToEdit ??= ModalRoute.of(context)!.settings.arguments as Product?;
+    if (productToEdit != null) {
+      fillForm();
+    }
+  }
+
+  // To fill the form field if we're editing a file
+  void fillForm() {
+    _productName.text = productToEdit!.name;
+    _productPrice.text = productToEdit!.price;
+    _productCategory.text = productToEdit!.category;
+    _productDescription.text = productToEdit!.description;
+    _selectedImage = productToEdit!.image;
+  }
+
   // for clearing the form data
   void clearForm() {
     _productName.clear();
@@ -117,7 +139,9 @@ class _AddUpdatePageState extends State<AddUpdatePage> {
                       category: _productCategory.text,
                       description: _productDescription.text,
                       image: _selectedImage!,
+                      index: productToEdit != null ? productToEdit!.index : -1,
                     );
+                    
                     Navigator.pop(context, newProduct);
                   } else {
                     // To do: give an alert messege that image should be selected

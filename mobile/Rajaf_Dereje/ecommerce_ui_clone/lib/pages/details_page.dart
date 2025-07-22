@@ -3,12 +3,6 @@ import '../constants/product_model.dart';
 import '../widgets/Icons.dart';
 import '../widgets/text.dart';
 
-String description = """
-A MacBook Air is a sleek and lightweight laptop renowned for its elegant design, impressive performance, and long-lasting battery life. Characterized by its slim profile and fanless build, 
-the MacBook Air offers a quiet and efficient user experience, making it ideal for both productivity and portability.
-It features Apple's advanced M-series chips, delivering powerful performance while maintaining energy efficiency. 
-""";
-
 class DetailsPage extends StatefulWidget {
   const DetailsPage({super.key});
 
@@ -17,6 +11,22 @@ class DetailsPage extends StatefulWidget {
 }
 
 class _DetailsPageState extends State<DetailsPage> {
+  // This function handles the navigation AND the result
+  void _navigateToUpdatePage(Product productToEdit) async {
+    // 1. Await the result from the ADD/UPDATE page
+    final updatedProduct =
+        await Navigator.pushNamed(
+              context,
+              '/addUpdate',
+              arguments: productToEdit,
+            )
+            as Product?;
+    // 2. If we got an updated product, pop this DetailsPage
+    //    and pass the result back to the HomePage.
+    if (updatedProduct != null && mounted) {
+      Navigator.pop(context, updatedProduct);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -161,7 +171,9 @@ class _DetailsPageState extends State<DetailsPage> {
                     ),
 
                     onPressed: () {
-                      debugPrint("delete button");
+                      product.delete =
+                          true; // Set delete property to notify home page to delete it
+                      Navigator.pop(context, product);
                     },
                     child: Center(
                       child: customText(
@@ -186,7 +198,8 @@ class _DetailsPageState extends State<DetailsPage> {
                     ),
 
                     onPressed: () {
-                      debugPrint("update button");
+                      // Call our navigation function
+                      _navigateToUpdatePage(product);
                     },
                     child: Center(
                       child: customText(
