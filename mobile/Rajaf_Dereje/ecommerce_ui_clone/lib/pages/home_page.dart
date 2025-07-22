@@ -14,12 +14,18 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   List<Product> _products = [];
 
+  // To navigate as well as recive product information from addUpdate page
   void _navigateAndAddProduct() async {
     final newProduct =
         await Navigator.pushNamed(context, '/addUpdate') as Product?;
     if (newProduct != null) {
       setState(() {
-        _products.add(newProduct);
+        if (newProduct.index == -1) {
+          newProduct.index = _products.length;
+          _products.add(newProduct);
+        } else {
+          _products[newProduct.index] = newProduct;
+        }
       });
     }
   }
@@ -96,12 +102,15 @@ class _HomePageState extends State<HomePage> {
             SizedBox(height: 20),
 
             // Products List using List.generate
-            ...List.generate(_products.length, (i) => Column(
-              children: [
-                card(context, product: _products[i]),
-                const SizedBox(height: 8,),
-              ],
-            ))
+            ...List.generate(
+              _products.length,
+              (i) => Column(
+                children: [
+                  card(context, product: _products[i]),
+                  const SizedBox(height: 8),
+                ],
+              ),
+            ),
           ],
         ),
       ),

@@ -6,6 +6,7 @@ class Product {
   final String category;
   final String description;
   final File image;
+  int index;
 
   Product({
     required this.name,
@@ -13,5 +14,6 @@ class Product {
     required this.category,
     required this.description,
     required this.image,
+    this.index = -1
   });
 }

@@ -3,11 +3,6 @@ import '../constants/product_model.dart';
 import '../widgets/Icons.dart';
 import '../widgets/text.dart';
 
-String description = """
-A MacBook Air is a sleek and lightweight laptop renowned for its elegant design, impressive performance, and long-lasting battery life. Characterized by its slim profile and fanless build, 
-the MacBook Air offers a quiet and efficient user experience, making it ideal for both productivity and portability.
-It features Apple's advanced M-series chips, delivering powerful performance while maintaining energy efficiency. 
-""";
 
 class DetailsPage extends StatefulWidget {
   const DetailsPage({super.key});
@@ -17,7 +12,6 @@ class DetailsPage extends StatefulWidget {
 }
 
 class _DetailsPageState extends State<DetailsPage> {
-
   @override
   Widget build(BuildContext context) {
     final product = ModalRoute.of(context)!.settings.arguments as Product;
@@ -186,7 +180,11 @@ class _DetailsPageState extends State<DetailsPage> {
                     ),
 
                     onPressed: () {
-                      debugPrint("update button");
+                      Navigator.pushNamed(
+                        context,
+                        '/addUpdate',
+                        arguments: product,
+                      );
                     },
                     child: Center(
                       child: customText(
