@@ -1,6 +1,6 @@
 import 'package:ecommerce_ui_clone/widgets/buttons.dart';
 import 'package:flutter/material.dart';
-import '../widgets/cards.dart';
+// import '../widgets/cards.dart';
 import '../widgets/text.dart';
 
 class SearchPage extends StatefulWidget {
