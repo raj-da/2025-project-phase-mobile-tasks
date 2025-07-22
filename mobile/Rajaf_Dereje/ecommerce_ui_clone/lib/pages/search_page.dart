@@ -55,10 +55,10 @@ class _SearchPageState extends State<SearchPage> {
               const SizedBox(height: 20),
 
               // Product Card
-              card(context),
-              const SizedBox(height: 20),
-              card(context),
-              const SizedBox(height: 20),
+              // card(context),
+              // const SizedBox(height: 20),
+              // card(context),
+              // const SizedBox(height: 20),
 
               // Filter section
               customText(text: "Category", size: 25),
@@ -81,7 +81,12 @@ class _SearchPageState extends State<SearchPage> {
               const SizedBox(height: 20),
 
               const SizedBox(height: 20),
-              addUpdateButton(buttonTitle: "APPLY"),
+              addUpdateButton(
+                buttonTitle: "APPLY",
+                onpressed: () {
+                  debugPrint("Apply pressed");
+                },
+              ),
             ],
           ),
         ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../constants/product_model.dart';
 import '../widgets/Icons.dart';
 import '../widgets/text.dart';
 
@@ -16,8 +17,10 @@ class DetailsPage extends StatefulWidget {
 }
 
 class _DetailsPageState extends State<DetailsPage> {
+
   @override
   Widget build(BuildContext context) {
+    final product = ModalRoute.of(context)!.settings.arguments as Product;
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(24.0),
@@ -29,8 +32,11 @@ class _DetailsPageState extends State<DetailsPage> {
                 // product Image
                 ClipRRect(
                   borderRadius: BorderRadius.vertical(top: Radius.circular(40)),
-                  child: Image.network(
-                    "https://fastly.picsum.photos/id/0/5000/3333.jpg?hmac=_j6ghY5fCfSD6tvtcV74zXivkJSPIfR9B8w34XeQmvU",
+                  child: Image.file(
+                    product.image,
+                    height: 400,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
                   ),
                 ),
 
@@ -81,13 +87,13 @@ class _DetailsPageState extends State<DetailsPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       customText(
-                        text: "MacAir Pro Laptop",
+                        text: product.name,
                         size: 28,
                         color: Color.fromARGB(255, 78, 75, 75),
                         isBold: true,
                       ),
                       customText(
-                        text: "\$800",
+                        text: "\$${product.price}",
                         size: 22,
                         color: Color.fromARGB(255, 49, 48, 48),
                       ),
@@ -132,7 +138,7 @@ class _DetailsPageState extends State<DetailsPage> {
             SizedBox(height: 20),
             // description section
             customText(
-              text: description,
+              text: product.description,
               size: 20,
               color: Colors.grey,
               isBold: true,
