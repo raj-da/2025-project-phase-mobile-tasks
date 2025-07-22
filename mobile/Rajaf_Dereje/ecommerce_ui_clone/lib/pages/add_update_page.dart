@@ -141,9 +141,7 @@ class _AddUpdatePageState extends State<AddUpdatePage> {
                       image: _selectedImage!,
                       index: productToEdit != null ? productToEdit!.index : -1,
                     );
-                    if (newProduct.index != -1) {
-                      Navigator.pop(context);
-                    }
+                    
                     Navigator.pop(context, newProduct);
                   } else {
                     // To do: give an alert messege that image should be selected

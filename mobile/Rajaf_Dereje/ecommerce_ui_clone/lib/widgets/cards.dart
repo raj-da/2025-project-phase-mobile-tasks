@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import '../constants/product_model.dart';
 import 'text.dart';
 
-Widget card(BuildContext context, {required Product product}) {
+Widget card(
+  BuildContext context, {
+  required Product product,
+  required VoidCallback onTap,
+}) {
   return GestureDetector(
-    onTap: () {
-      Navigator.pushNamed(context, '/details', arguments: product);
-    },
+    onTap: onTap,
     child: SizedBox(
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),

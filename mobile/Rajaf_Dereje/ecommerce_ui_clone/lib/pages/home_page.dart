@@ -14,20 +14,35 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   List<Product> _products = [];
 
+  // Central place to handle adding or updating a product
+  void _handleProductResult(Product? product) {
+    if (product != null) {
+      setState(() {
+        // If index is -1, it's a new product
+        if (product.index == -1) {
+          product.index = _products.length;
+          _products.add(product);
+        } else {
+          // Otherwise, find the existing product by its index and update it
+          _products[product.index] = product;
+        }
+      });
+    }
+  }
+
   // To navigate as well as recive product information from addUpdate page
   void _navigateAndAddProduct() async {
     final newProduct =
         await Navigator.pushNamed(context, '/addUpdate') as Product?;
-    if (newProduct != null) {
-      setState(() {
-        if (newProduct.index == -1) {
-          newProduct.index = _products.length;
-          _products.add(newProduct);
-        } else {
-          _products[newProduct.index] = newProduct;
-        }
-      });
-    }
+    _handleProductResult(newProduct);
+  }
+
+  // Navigate to VIEW/EDIT an existing product
+  void _navigateToDetails(Product product) async {
+    // Await the result from the details page flow
+    final updatedProduct =
+        await Navigator.pushNamed(context, '/details', arguments: product) as Product?;
+    _handleProductResult(updatedProduct);
   }
 
   @override
@@ -106,7 +121,11 @@ class _HomePageState extends State<HomePage> {
               _products.length,
               (i) => Column(
                 children: [
-                  card(context, product: _products[i]),
+                  card(
+                    context,
+                    product: _products[i],
+                    onTap: () => _navigateToDetails(_products[i]),
+                  ),
                   const SizedBox(height: 8),
                 ],
               ),

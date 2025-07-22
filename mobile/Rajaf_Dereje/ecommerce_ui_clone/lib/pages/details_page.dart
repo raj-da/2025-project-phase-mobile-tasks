@@ -3,7 +3,6 @@ import '../constants/product_model.dart';
 import '../widgets/Icons.dart';
 import '../widgets/text.dart';
 
-
 class DetailsPage extends StatefulWidget {
   const DetailsPage({super.key});
 
@@ -12,6 +11,23 @@ class DetailsPage extends StatefulWidget {
 }
 
 class _DetailsPageState extends State<DetailsPage> {
+  // This function handles the navigation AND the result
+  void _navigateToUpdatePage(Product productToEdit) async {
+    // 1. Await the result from the ADD/UPDATE page
+    final updatedProduct =
+        await Navigator.pushNamed(
+              context,
+              '/addUpdate',
+              arguments: productToEdit,
+            )
+            as Product?;
+    // 2. If we got an updated product, pop this DetailsPage
+    //    and pass the result back to the HomePage.
+    if (updatedProduct != null && mounted) {
+      Navigator.pop(context, updatedProduct);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final product = ModalRoute.of(context)!.settings.arguments as Product;
@@ -180,11 +196,8 @@ class _DetailsPageState extends State<DetailsPage> {
                     ),
 
                     onPressed: () {
-                      Navigator.pushNamed(
-                        context,
-                        '/addUpdate',
-                        arguments: product,
-                      );
+                      // Call our navigation function
+                      _navigateToUpdatePage(product);
                     },
                     child: Center(
                       child: customText(
@@ -232,3 +245,4 @@ Widget size({
     ),
   );
 }
+
