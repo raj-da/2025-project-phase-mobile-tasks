@@ -7,6 +7,7 @@ class Product {
   final String description;
   final File image;
   int index;
+  bool delete = false; // to determine if we want to remove the product
 
   Product({
     required this.name,
@@ -14,6 +15,6 @@ class Product {
     required this.category,
     required this.description,
     required this.image,
-    this.index = -1
+    this.index = -1,
   });
 }

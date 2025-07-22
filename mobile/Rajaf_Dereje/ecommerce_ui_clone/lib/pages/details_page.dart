@@ -171,7 +171,9 @@ class _DetailsPageState extends State<DetailsPage> {
                     ),
 
                     onPressed: () {
-                      debugPrint("delete button");
+                      product.delete =
+                          true; // Set delete property to notify home page to delete it
+                      Navigator.pop(context, product);
                     },
                     child: Center(
                       child: customText(
@@ -245,4 +247,3 @@ Widget size({
     ),
   );
 }
-
