@@ -1,3 +1,6 @@
+import 'package:dartz/dartz.dart';
+
+import '../../../../core/error/failures.dart';
 import '../../../../core/platform/network_info.dart';
 import '../../domain/entities/product.dart';
 import '../../domain/repositories/product_repository.dart';
@@ -16,32 +19,34 @@ class ProductRepositoryImpl implements ProductRepository {
   });
 
   @override
-  Future<void> createproduct(Product product) {
+  Future<Either<Failure, void>> createproduct(Product product) {
     // TODO: implement createproduct
     throw UnimplementedError();
   }
 
   @override
-  Future<void> deleteProduct(String id) {
+  Future<Either<Failure, void>> deleteProduct(String id) {
     // TODO: implement deleteProduct
     throw UnimplementedError();
   }
 
   @override
-  Future<List<Product>> getAllProduct() {
+  Future<Either<Failure, List<Product>>> getAllProduct() {
     // TODO: implement getAllProduct
     throw UnimplementedError();
   }
 
   @override
-  Future<Product?> getProductById(String id) {
+  Future<Either<Failure, Product?>> getProductById(String id) {
     // TODO: implement getProductById
     throw UnimplementedError();
   }
 
   @override
-  Future<void> updateProduct(Product product) {
+  Future<Either<Failure, void>> updateProduct(Product product) {
     // TODO: implement updateProduct
     throw UnimplementedError();
   }
+
+  
 }
