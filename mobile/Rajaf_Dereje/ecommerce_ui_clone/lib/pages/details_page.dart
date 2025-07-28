@@ -41,7 +41,7 @@ class _DetailsPageState extends State<DetailsPage> {
               children: [
                 // product Image
                 ClipRRect(
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(40)),
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(40)),
                   child: Image.file(
                     product.image,
                     height: 400,
@@ -75,43 +75,43 @@ class _DetailsPageState extends State<DetailsPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       customText(
-                        text: "Color white",
+                        text: 'Color white',
                         size: 15,
-                        color: Color.fromARGB(255, 167, 162, 162),
+                        color: const Color.fromARGB(255, 167, 162, 162),
                       ),
                       Row(
                         children: [
-                          Icon(Icons.star, color: Colors.amber),
+                          const Icon(Icons.star, color: Colors.amber),
                           customText(
-                            text: "(4.0)",
+                            text: '(4.0)',
                             size: 18,
-                            color: Color.fromARGB(255, 167, 162, 162),
+                            color: const Color.fromARGB(255, 167, 162, 162),
                           ),
                         ],
                       ),
                     ],
                   ),
 
-                  SizedBox(height: 5),
+                  const SizedBox(height: 5),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       customText(
                         text: product.name,
                         size: 28,
-                        color: Color.fromARGB(255, 78, 75, 75),
+                        color: const Color.fromARGB(255, 78, 75, 75),
                         isBold: true,
                       ),
                       customText(
-                        text: "\$${product.price}",
+                        text: '\$${product.price}',
                         size: 22,
-                        color: Color.fromARGB(255, 49, 48, 48),
+                        color: const Color.fromARGB(255, 49, 48, 48),
                       ),
                     ],
                   ),
 
                   customText(
-                    text: "Size:",
+                    text: 'Size:',
                     size: 28,
                     isBold: true,
                     color: const Color.fromARGB(255, 111, 110, 110),
@@ -126,26 +126,26 @@ class _DetailsPageState extends State<DetailsPage> {
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: [
-                  size(size: "39"),
-                  size(size: "40"),
+                  size(size: '39'),
+                  size(size: '40'),
                   size(
-                    size: "41",
+                    size: '41',
                     backGroundColor: Colors.deepPurple,
                     textColor: Colors.white,
                   ),
-                  size(size: "42"),
-                  size(size: "43"),
-                  size(size: "44"),
-                  size(size: "45"),
-                  size(size: "46"),
-                  size(size: "47"),
-                  size(size: "48"),
-                  size(size: "49"),
+                  size(size: '42'),
+                  size(size: '43'),
+                  size(size: '44'),
+                  size(size: '45'),
+                  size(size: '46'),
+                  size(size: '47'),
+                  size(size: '48'),
+                  size(size: '49'),
                 ],
               ),
             ),
 
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             // description section
             customText(
               text: product.description,
@@ -177,7 +177,7 @@ class _DetailsPageState extends State<DetailsPage> {
                     },
                     child: Center(
                       child: customText(
-                        text: "DELETE",
+                        text: 'DELETE',
                         size: 22,
                         color: Colors.red,
                         isBold: true,
@@ -203,7 +203,7 @@ class _DetailsPageState extends State<DetailsPage> {
                     },
                     child: Center(
                       child: customText(
-                        text: "UPDATE",
+                        text: 'UPDATE',
                         size: 22,
                         color: Colors.white,
                         isBold: true,
@@ -230,16 +230,16 @@ Widget size({
     decoration: BoxDecoration(
       color: backGroundColor,
       borderRadius: BorderRadius.circular(12),
-      boxShadow: [
+      boxShadow: const [
         BoxShadow(
-          color: const Color.fromARGB(66, 233, 230, 230),
+          color: Color.fromARGB(66, 233, 230, 230),
           blurRadius: 6,
           offset: Offset(0, 3),
           spreadRadius: 0.5,
         ),
       ],
     ),
-    margin: EdgeInsets.symmetric(horizontal: 8),
+    margin: const EdgeInsets.symmetric(horizontal: 8),
     width: 70,
     // padding: EdgeInsets.symmetric(horizontal: 26),
     child: Center(

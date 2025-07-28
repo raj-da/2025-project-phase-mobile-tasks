@@ -13,7 +13,7 @@ Widget squareIcon({
     ),
     child: IconButton(
       onPressed: () {
-        debugPrint("Search Icon");
+        debugPrint('Search Icon');
       },
       icon: Icon(icon, color: iconColor, size: size),
     ),
