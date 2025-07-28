@@ -1,9 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io';
+
 import '../constants/product_model.dart';
-import '../widgets/text.dart'; // For custom inputs
 import '../widgets/buttons.dart';
+import '../widgets/text.dart'; // For custom inputs
 
 // value variables
 const double pagePadding = 24.0;
@@ -89,7 +91,7 @@ class _AddUpdatePageState extends State<AddUpdatePage> {
       appBar: AppBar(
         centerTitle: true,
         // leading: Icon(Icons.arrow_back_ios_new, color: Colors.deepPurple),
-        title: Text("Add Product"),
+        title: const Text('Add Product'),
       ),
 
       body: Padding(
@@ -109,19 +111,19 @@ class _AddUpdatePageState extends State<AddUpdatePage> {
                     ),
 
                     // name input
-                    customText(text: "name", size: 20),
+                    customText(text: 'name', size: 20),
                     textInput(controller: _productName),
 
                     // category input
-                    customText(text: "category", size: 20),
+                    customText(text: 'category', size: 20),
                     textInput(controller: _productCategory),
 
                     // price input
-                    customText(text: "price", size: 20),
+                    customText(text: 'price', size: 20),
                     textInput(controller: _productPrice),
 
                     // description input
-                    customText(text: "description", size: 20),
+                    customText(text: 'description', size: 20),
                     textInput(controller: _productDescription, maxLines: 7),
                   ],
                 ),
@@ -129,7 +131,7 @@ class _AddUpdatePageState extends State<AddUpdatePage> {
 
               const SizedBox(height: 20),
               addUpdateButton(
-                buttonTitle: "ADD",
+                buttonTitle: 'ADD',
                 onpressed: () {
                   if (_formKey.currentState!.validate() &&
                       _selectedImage != null) {
@@ -146,14 +148,14 @@ class _AddUpdatePageState extends State<AddUpdatePage> {
                   } else {
                     // To do: give an alert messege that image should be selected
                     debugPrint(
-                      "##########################################################",
+                      '##########################################################',
                     );
-                    debugPrint("Image should be selected");
+                    debugPrint('Image should be selected');
                   }
                 },
               ),
               deleteButton(
-                buttonTitle: "DELETE",
+                buttonTitle: 'DELETE',
                 onpressed: () {
                   setState(() {
                     clearForm();
@@ -179,7 +181,7 @@ Widget imageInputField({
       width: double.infinity,
       height: 200,
       decoration: BoxDecoration(
-        color: Color(0xFFF1F0F0),
+        color: const Color(0xFFF1F0F0),
         borderRadius: BorderRadius.circular(10),
         image: selectedImage != null
             ? DecorationImage(
@@ -189,13 +191,13 @@ Widget imageInputField({
             : null,
       ),
       child: selectedImage == null
-          ? Center(
+          ? const Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(Icons.image, size: 50, color: Colors.grey),
                   SizedBox(height: 10),
-                  Text("Upload Image", style: TextStyle(color: Colors.grey)),
+                  Text('Upload Image', style: TextStyle(color: Colors.grey)),
                 ],
               ),
             )
@@ -208,7 +210,7 @@ Widget imageInputField({
 Widget textInput({
   required TextEditingController controller,
   int maxLines = 1,
-  String hintText = "",
+  String hintText = '',
 }) {
   return TextFormField(
     maxLines: maxLines,
@@ -216,7 +218,7 @@ Widget textInput({
       hintText: hintText,
       enabledBorder: InputBorder.none,
       focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.white),
+        borderSide: const BorderSide(color: Colors.white),
         borderRadius: BorderRadius.circular(10),
       ),
       border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),

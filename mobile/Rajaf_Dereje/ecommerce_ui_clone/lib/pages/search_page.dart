@@ -1,5 +1,6 @@
-import 'package:ecommerce_ui_clone/widgets/buttons.dart';
 import 'package:flutter/material.dart';
+
+import '../widgets/buttons.dart';
 // import '../widgets/cards.dart';
 import '../widgets/text.dart';
 
@@ -16,12 +17,12 @@ class _SearchPageState extends State<SearchPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        leading: Icon(Icons.arrow_back_ios_new, color: Colors.deepPurple),
-        title: customText(text: "Search Product", size: 22, isBold: true),
+        leading: const Icon(Icons.arrow_back_ios_new, color: Colors.deepPurple),
+        title: customText(text: 'Search Product', size: 22, isBold: true),
       ),
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(18.0),
+          padding: const EdgeInsets.all(18.0),
           child: ListView(
             children: [
               // Top search bar
@@ -31,7 +32,7 @@ class _SearchPageState extends State<SearchPage> {
                     child: TextField(
                       decoration: InputDecoration(
                         hintText: 'Lenovo',
-                        suffixIcon: Icon(
+                        suffixIcon: const Icon(
                           Icons.arrow_forward,
                           color: Colors.deepPurple,
                         ),
@@ -43,12 +44,12 @@ class _SearchPageState extends State<SearchPage> {
                   ),
                   const SizedBox(width: 12),
                   Container(
-                    padding: EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
                       color: Colors.deepPurple,
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Icon(Icons.filter_list, color: Colors.white),
+                    child: const Icon(Icons.filter_list, color: Colors.white),
                   ),
                 ],
               ),
@@ -61,7 +62,7 @@ class _SearchPageState extends State<SearchPage> {
               // const SizedBox(height: 20),
 
               // Filter section
-              customText(text: "Category", size: 25),
+              customText(text: 'Category', size: 25),
               TextField(
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
@@ -71,7 +72,7 @@ class _SearchPageState extends State<SearchPage> {
               ),
               const SizedBox(height: 20),
 
-              customText(text: "Price", size: 22),
+              customText(text: 'Price', size: 22),
               Slider(
                 value: 50,
                 max: 100,
@@ -82,9 +83,9 @@ class _SearchPageState extends State<SearchPage> {
 
               const SizedBox(height: 20),
               addUpdateButton(
-                buttonTitle: "APPLY",
+                buttonTitle: 'APPLY',
                 onpressed: () {
-                  debugPrint("Apply pressed");
+                  debugPrint('Apply pressed');
                 },
               ),
             ],

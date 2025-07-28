@@ -16,7 +16,7 @@ Widget card(
         child: Column(
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
               child: Image.file(
                 product.image,
                 width: double.infinity,
@@ -43,12 +43,12 @@ Widget card(
                       customText(
                         text: product.name,
                         size: 28,
-                        color: Color.fromARGB(255, 96, 94, 94),
+                        color: const Color.fromARGB(255, 96, 94, 94),
                       ),
                       customText(
-                        text: "\$${product.price}",
+                        text: '\$${product.price}',
                         size: 22,
-                        color: Color.fromARGB(255, 96, 94, 94),
+                        color: const Color.fromARGB(255, 96, 94, 94),
                       ),
                     ],
                   ),
@@ -56,17 +56,17 @@ Widget card(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       customText(
-                        text: "Color white",
+                        text: 'Color white',
                         size: 15,
-                        color: Color.fromARGB(255, 167, 162, 162),
+                        color: const Color.fromARGB(255, 167, 162, 162),
                       ),
                       Row(
                         children: [
-                          Icon(Icons.star, color: Colors.amber),
+                          const Icon(Icons.star, color: Colors.amber),
                           customText(
-                            text: "(4.0)",
+                            text: '(4.0)',
                             size: 18,
-                            color: Color.fromARGB(255, 167, 162, 162),
+                            color: const Color.fromARGB(255, 167, 162, 162),
                           ),
                         ],
                       ),

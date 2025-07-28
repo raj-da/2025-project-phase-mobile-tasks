@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import '../widgets/text.dart';
+
+import '../constants/product_model.dart';
 import '../widgets/Icons.dart';
 import '../widgets/cards.dart';
-import '../constants/product_model.dart';
+import '../widgets/text.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -13,7 +14,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   // Map to hold our product for efficient lookups and delete in O(1)
-  Map<int, Product> _products = {};
+  final Map<int, Product> _products = {};
   int _nextProductId = 0; // Counter for new product IDs.
 
   // Central place to handle adding or updating a product
@@ -90,13 +91,13 @@ class _HomePageState extends State<HomePage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // Date
-                        customText(text: "July 19, 2025", size: 12),
+                        customText(text: 'July 19, 2025', size: 12),
 
                         // hello messege
                         Row(
                           children: [
-                            customText(text: "Hello, ", size: 22),
-                            customText(text: "Rajaf", size: 22, isBold: true),
+                            customText(text: 'Hello, ', size: 22),
+                            customText(text: 'Rajaf', size: 22, isBold: true),
                           ],
                         ),
                       ],
@@ -119,13 +120,13 @@ class _HomePageState extends State<HomePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                customText(text: "Available Products", size: 34, isBold: true),
+                customText(text: 'Available Products', size: 34, isBold: true),
 
                 squareIcon(icon: Icons.search),
               ],
             ),
 
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
             // Products List using List.generate
             ...List.generate(
@@ -146,7 +147,7 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _navigateAndAddProduct,
-        shape: CircleBorder(),
+        shape: const CircleBorder(),
         backgroundColor: Colors.deepPurple,
         child: const Icon(Icons.add, color: Colors.white, size: 30.0),
       ),
