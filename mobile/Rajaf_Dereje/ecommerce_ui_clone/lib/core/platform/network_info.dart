@@ -1,5 +1,5 @@
 /// To check if our device is online
 ///
-class NetworkInfo {
-  
+abstract class NetworkInfo {
+  Future<bool> get isConnected;
 }

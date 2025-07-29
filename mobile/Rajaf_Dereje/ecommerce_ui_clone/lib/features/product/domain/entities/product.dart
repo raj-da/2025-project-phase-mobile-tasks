@@ -6,7 +6,7 @@ class Product {
   final String category;
   final String description;
   final String imagePath;
-  final int id;
+  final String id;
 
   Product({
     required this.name,

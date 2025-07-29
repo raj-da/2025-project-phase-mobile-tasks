@@ -18,5 +18,5 @@ abstract class ProductRemoteDataSource {
   Future<void> updateProduct(ProductModel product);
 
   /// Deletes a product by its [id] from the remote source.
-  Future<void> deleteProduct(int id);
+  Future<void> deleteProduct(String id);
 }
