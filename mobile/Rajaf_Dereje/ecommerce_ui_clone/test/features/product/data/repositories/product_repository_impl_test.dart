@@ -244,4 +244,60 @@ void main() {
       });
     });
   }); // delete product group
+
+  group('Create product', () {
+    ProductModel tproductModel = ProductModel(
+      name: 'test',
+      price: 'test',
+      category: 'test',
+      description: 'test',
+      imagePath: 'test',
+      id: '1',
+    );
+
+    runTestsOnline(() {
+      test('Should check if the deveice is online', () async {
+        // Arrange
+        when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+        when(mockRemoteDataSource.createProduct(any)).thenAnswer((_) async {});
+
+        // Act
+        final result = await repository.createproduct(tproductModel);
+
+        // Assert
+        verify(mockNetworkInfo.isConnected);
+        verify(mockRemoteDataSource.createProduct(tproductModel));
+        expect(result, equals(const Right(null)));
+      });
+
+      test(
+        'Should return ServerFaliur if connection to remoteDataSource is uncessesful',
+        () {
+          // Arrange
+          when(
+            mockRemoteDataSource.createProduct(any),
+          ).thenAnswer((_) async => ServerException);
+
+          // Act
+          final result = repository.createproduct(tproductModel);
+          // Assert
+          verify(mockRemoteDataSource.createProduct(any));
+          expect(result, isA<Left<Failure, void>>());
+          expect((result as Left).value, isA<ServerFailure>());
+        },
+      );
+    }); // online test
+
+    runTestsOffline(() {
+      test('Should return NetworkFailure when device is offline', () async {
+        // Act
+        final result = await repository.createproduct(tproductModel);
+
+        // Assert
+        verifyZeroInteractions(mockRemoteDataSource);
+        expect(result, isA<Left<Failure, void>>());
+        expect((result as Left).value, isA<NetworkFailure>());
+      });
+    }); // offline test
+  }); // create product group
 }
