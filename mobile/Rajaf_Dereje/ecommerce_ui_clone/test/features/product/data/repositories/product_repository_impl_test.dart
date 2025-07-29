@@ -1,5 +1,7 @@
 // import 'dart:math';
 
+import 'dart:nativewrappers/_internal/vm/lib/math_patch.dart';
+
 import 'package:dartz/dartz.dart';
 import 'package:ecommerce_ui_clone/core/error/exception.dart';
 import 'package:ecommerce_ui_clone/core/error/failures.dart';
@@ -64,7 +66,7 @@ void main() {
         category: 'test',
         description: 'test',
         imagePath: 'test',
-        id: 1,
+        id: '1',
       ),
     ];
 
@@ -191,9 +193,55 @@ void main() {
           // Check that we got a CacheFailure.
           expect(result, isA<Left<Failure, List<Product>>>());
           expect((result as Left).value, isA<CachedFailure>());
-
         },
       );
     });
-  });
+  }); // get all product group
+
+  group('Delete product', () {
+    String id = 'AB';
+    runTestsOnline(() {
+      test('Should check if the deveice is online', () async {
+        // Arrange
+        when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+        when(mockRemoteDataSource.deleteProduct(any)).thenAnswer((_) async {});
+
+        // Act
+        final result = await repository.deleteProduct(id);
+
+        // Assert
+        verify(mockNetworkInfo.isConnected);
+        verify(mockRemoteDataSource.deleteProduct(id));
+        expect(result, equals(const Right(null)));
+      });
+
+      test(
+        'Should return ServerFaliur if connection to remoteDataSource is uncessesful',
+        () {
+          // Arrange
+          when(
+            mockRemoteDataSource.deleteProduct(id),
+          ).thenAnswer((_) async => ServerException);
+
+          final result = repository.deleteProduct(id);
+          // Assert
+          verify(mockRemoteDataSource.deleteProduct(any));
+          expect(result, isA<Left<Failure, void>>());
+          expect((result as Left).value, isA<ServerFailure>());
+        },
+      );
+    }); // online test
+
+    runTestsOffline(() {
+      test('Should return NetworkFailure when device is offline', () async {
+        // Act
+        final result = await repository.deleteProduct(id);
+
+        // Assert
+        verifyZeroInteractions(mockRemoteDataSource);
+        expect(result, isA<Left<Failure, void>>());
+        expect((result as Left).value, isA<NetworkFailure>());
+      });
+    });
+  }); // delete product group
 }

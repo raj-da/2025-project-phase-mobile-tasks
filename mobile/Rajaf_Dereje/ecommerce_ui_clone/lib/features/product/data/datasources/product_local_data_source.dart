@@ -7,7 +7,7 @@ abstract class ProductLocalDataSource {
 
   /// Fetches the cached [ProductModel] by its ID
   ///
-  Future<ProductModel> getCachedProductById(int id);
+  Future<ProductModel> getCachedProductById(String id);
 
   /// Caches a list of products
   ///
