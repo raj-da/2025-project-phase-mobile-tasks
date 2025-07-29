@@ -69,14 +69,30 @@ class ProductRepositoryImpl implements ProductRepository {
   }
 
   @override
-  Future<Either<Failure, Product?>> getProductById(String id) {
-    // TODO: implement getProductById
-    throw UnimplementedError();
+  Future<Either<Failure, Product?>> getProductById(String id) async {
+    if (await networkInfo.isConnected) {
+      try {
+        final product = await remoteDataSource.getProductById(id);
+        return Right(product);
+      } on ServerException {
+        return Left(ServerFailure('Server Error'));
+      }
+    } else {
+      return Left(NetworkFailure('Lost Network connection'));
+    }
   }
 
   @override
-  Future<Either<Failure, void>> updateProduct(Product product) {
-    // TODO: implement updateProduct
-    throw UnimplementedError();
+  Future<Either<Failure, void>> updateProduct(Product product) async {
+    if (await networkInfo.isConnected) {
+      try {
+        await remoteDataSource.updateProduct(product as ProductModel);
+        return const Right(null);
+      } on ServerException {
+        return Left(ServerFailure('Server Error'));
+      }
+    } else {
+      return Left(NetworkFailure('Lost Network connection'));
+    }
   }
 }

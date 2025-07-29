@@ -1,6 +1,6 @@
 // import 'dart:math';
 
-import 'dart:nativewrappers/_internal/vm/lib/math_patch.dart';
+// import 'dart:nativewrappers/_internal/vm/lib/math_patch.dart';
 
 import 'package:dartz/dartz.dart';
 import 'package:ecommerce_ui_clone/core/error/exception.dart';
@@ -203,8 +203,9 @@ void main() {
     runTestsOnline(() {
       test('Should check if the deveice is online', () async {
         // Arrange
-        when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-        when(mockRemoteDataSource.deleteProduct(any)).thenAnswer((_) async {});
+        when(
+          mockRemoteDataSource.deleteProduct(any),
+        ).thenAnswer((_) async => Future.value()); // Mocking a void Future
 
         // Act
         final result = await repository.deleteProduct(id);
@@ -217,13 +218,13 @@ void main() {
 
       test(
         'Should return ServerFaliur if connection to remoteDataSource is uncessesful',
-        () {
+        () async {
           // Arrange
           when(
             mockRemoteDataSource.deleteProduct(id),
-          ).thenAnswer((_) async => ServerException);
+          ).thenThrow(ServerException());
 
-          final result = repository.deleteProduct(id);
+          final result = await repository.deleteProduct(id);
           // Assert
           verify(mockRemoteDataSource.deleteProduct(any));
           expect(result, isA<Left<Failure, void>>());
@@ -259,7 +260,9 @@ void main() {
       test('Should check if the deveice is online', () async {
         // Arrange
         when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-        when(mockRemoteDataSource.createProduct(any)).thenAnswer((_) async {});
+        when(
+          mockRemoteDataSource.createProduct(any),
+        ).thenAnswer((_) async => Future.value());
 
         // Act
         final result = await repository.createproduct(tproductModel);
@@ -272,14 +275,14 @@ void main() {
 
       test(
         'Should return ServerFaliur if connection to remoteDataSource is uncessesful',
-        () {
+        () async {
           // Arrange
           when(
             mockRemoteDataSource.createProduct(any),
-          ).thenAnswer((_) async => ServerException);
+          ).thenThrow(ServerException());
 
           // Act
-          final result = repository.createproduct(tproductModel);
+          final result = await repository.createproduct(tproductModel);
           // Assert
           verify(mockRemoteDataSource.createProduct(any));
           expect(result, isA<Left<Failure, void>>());
@@ -300,4 +303,118 @@ void main() {
       });
     }); // offline test
   }); // create product group
+
+  group('get product by id', () {
+    String id = '1';
+    ProductModel tproductModel = ProductModel(
+      name: 'test',
+      price: 'test',
+      category: 'test',
+      description: 'test',
+      imagePath: 'test',
+      id: '1',
+    );
+
+    runTestsOnline(() {
+      test('Should check if the deveice is online', () async {
+        // Arrange
+        when(
+          mockRemoteDataSource.getProductById(any),
+        ).thenAnswer((_) async => tproductModel);
+
+        // Act
+        final result = await repository.getProductById(id);
+
+        // Assert
+        verify(mockNetworkInfo.isConnected);
+        verify(mockRemoteDataSource.getProductById(id));
+        expect(result, isA<Right<Failure, Product?>>());
+        expect((result as Right).value, isA<Product?>());
+      });
+
+      test(
+        'Should return ServerFaliur if connection to remoteDataSource is uncessesful',
+        () async {
+          // Arrange
+          when(
+            mockRemoteDataSource.getProductById(any),
+          ).thenThrow(ServerException());
+
+          // Act
+          final result = await repository.getProductById(id);
+          // Assert
+          verify(mockRemoteDataSource.getProductById(id));
+          expect(result, isA<Left<Failure, Product?>>());
+          expect((result as Left).value, isA<ServerFailure>());
+        },
+      );
+    }); // online test
+
+    runTestsOffline(() {
+      test('Should return NetworkFailure when device is offline', () async {
+        // Act
+        final result = await repository.getProductById(id);
+
+        // Assert
+        verifyZeroInteractions(mockRemoteDataSource);
+        expect(result, isA<Left<Failure, Product?>>());
+        expect((result as Left).value, isA<NetworkFailure>());
+      });
+    }); // offline test
+  }); // get product by id group
+
+  group('updateProduct', () {
+    ProductModel tProductModel = ProductModel(
+      name: 'test',
+      price: 'test',
+      category: 'test',
+      description: 'test',
+      imagePath: 'test',
+      id: '1',
+    );
+
+    runTestsOnline(() {
+      test(
+        'should call remote data source and return success (Right(null))',
+        () async {
+          // Arrange
+          when(
+            mockRemoteDataSource.updateProduct(any),
+          ).thenAnswer((_) async => Future.value());
+          // Act
+          final result = await repository.updateProduct(tProductModel);
+          // Assert
+          verify(mockRemoteDataSource.updateProduct(tProductModel));
+          expect(result, equals(const Right(null)));
+        },
+      );
+
+      test(
+        'should return ServerFailure when the call to remote data source is unsuccessful',
+        () async {
+          // Arrange
+          when(
+            mockRemoteDataSource.updateProduct(any),
+          ).thenThrow(ServerException());
+          // Act
+          final result = await repository.updateProduct(tProductModel);
+          // Assert
+          verify(mockRemoteDataSource.updateProduct(tProductModel));
+          expect(result, isA<Left<Failure, void>>());
+          expect((result as Left).value, isA<ServerFailure>());
+        },
+      );
+    });
+
+    runTestsOffline(() {
+      test('should return NetworkFailure when device is offline', () async {
+        // Act
+        final result = await repository.updateProduct(tProductModel);
+        // Assert
+        verifyZeroInteractions(mockRemoteDataSource);
+        expect(result, isA<Left<Failure, void>>());
+        expect((result as Left).value, isA<NetworkFailure>());
+      });
+    });
+  });
 }
