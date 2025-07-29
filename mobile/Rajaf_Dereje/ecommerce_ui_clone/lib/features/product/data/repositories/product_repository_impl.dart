@@ -21,9 +21,17 @@ class ProductRepositoryImpl implements ProductRepository {
   });
 
   @override
-  Future<Either<Failure, void>> createproduct(Product product) {
-    // TODO: implement createproduct
-    throw UnimplementedError();
+  Future<Either<Failure, void>> createproduct(Product product) async {
+    if (await networkInfo.isConnected) {
+      try {
+        await remoteDataSource.createProduct(product as ProductModel);
+        return Right(null);
+      } on ServerException {
+        return Left(ServerFailure('Server Error'));
+      }
+    } else {
+      return Left(NetworkFailure('Lost Network connection'));
+    }
   }
 
   @override
