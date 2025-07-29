@@ -1,11 +1,13 @@
 import 'package:dartz/dartz.dart';
 
+import '../../../../core/error/exception.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/platform/network_info.dart';
 import '../../domain/entities/product.dart';
 import '../../domain/repositories/product_repository.dart';
 import '../datasources/product_local_data_source.dart';
 import '../datasources/product_remote_data_source.dart';
+import '../models/product_model.dart';
 
 class ProductRepositoryImpl implements ProductRepository {
   final ProductRemoteDataSource remoteDataSource;
@@ -15,7 +17,7 @@ class ProductRepositoryImpl implements ProductRepository {
   ProductRepositoryImpl({
     required this.remoteDataSource,
     required this.localDataSource,
-    required this.networkInfo
+    required this.networkInfo,
   });
 
   @override
@@ -31,9 +33,23 @@ class ProductRepositoryImpl implements ProductRepository {
   }
 
   @override
-  Future<Either<Failure, List<Product>>> getAllProduct() {
-    // TODO: implement getAllProduct
-    throw UnimplementedError();
+  Future<Either<Failure, List<Product>>> getAllProduct() async {
+    if (await networkInfo.isConnected) {
+      try {
+        final remoteProducts = await remoteDataSource.getAllProducts();
+        await localDataSource.cacheProductList(remoteProducts);
+        return Right(remoteProducts);
+      } on ServerException {
+        return Left(ServerFailure('Server Error'));
+      }
+    } else {
+      try {
+        final localProducts = await localDataSource.getCachedProducts();
+        return Right(localProducts);
+      } on CacheException {
+        return Left(CachedFailure('Error no internet connection'));
+      }
+    }
   }
 
   @override
@@ -47,6 +63,4 @@ class ProductRepositoryImpl implements ProductRepository {
     // TODO: implement updateProduct
     throw UnimplementedError();
   }
-
-  
 }
