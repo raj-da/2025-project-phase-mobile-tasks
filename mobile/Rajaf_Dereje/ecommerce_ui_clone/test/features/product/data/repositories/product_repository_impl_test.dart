@@ -5,17 +5,20 @@
 import 'package:dartz/dartz.dart';
 import 'package:ecommerce_ui_clone/core/error/exception.dart';
 import 'package:ecommerce_ui_clone/core/error/failures.dart';
+import 'package:ecommerce_ui_clone/core/network/network_info.dart';
+import 'package:ecommerce_ui_clone/features/product/data/datasources/product_local_data_source.dart';
+import 'package:ecommerce_ui_clone/features/product/data/datasources/product_remote_data_source.dart';
 import 'package:ecommerce_ui_clone/features/product/data/models/product_model.dart';
 import 'package:ecommerce_ui_clone/features/product/data/repositories/product_repository_impl.dart';
 import 'package:ecommerce_ui_clone/features/product/domain/entities/product.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-// import 'package:mockito/annotations.dart';
 
 // This annotation tells build_runner to generate a file with mock classes
 // for the classes listed here.
 // Run flutter pub run build_runner build
-// @GenerateMocks([ProductRemoteDataSource, ProductLocalDataSource, NetworkInfo])
+@GenerateMocks([ProductRemoteDataSource, ProductLocalDataSource, NetworkInfo])
 import 'product_repository_impl_test.mocks.dart';
 
 void main() {

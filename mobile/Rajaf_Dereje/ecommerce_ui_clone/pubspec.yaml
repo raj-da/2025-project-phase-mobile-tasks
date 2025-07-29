@@ -38,6 +38,8 @@ dependencies:
 
   # For Either<Failure, T> feature
   dartz: ^0.10.1
+  # For connection checker
+  internet_connection_checker: ^3.0.1
 
 dev_dependencies:
   flutter_test:
