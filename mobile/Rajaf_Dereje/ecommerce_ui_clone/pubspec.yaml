@@ -40,6 +40,8 @@ dependencies:
   dartz: ^0.10.1
   # For connection checker
   internet_connection_checker: ^3.0.1
+  # For local cacheing
+  shared_preferences: ^2.2.2
 
 dev_dependencies:
   flutter_test:
