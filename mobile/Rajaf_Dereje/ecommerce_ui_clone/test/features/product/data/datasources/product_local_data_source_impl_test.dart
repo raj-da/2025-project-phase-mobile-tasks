@@ -1,7 +1,7 @@
-// import 'package:mockito/annotations.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
+import 'package:mockito/annotations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-// @GenerateMocks([SharedPreferences])
+@GenerateMocks([SharedPreferences])
 
 import 'dart:convert';
 import 'package:ecommerce_ui_clone/features/product/data/datasources/product_local_data_source.dart';
