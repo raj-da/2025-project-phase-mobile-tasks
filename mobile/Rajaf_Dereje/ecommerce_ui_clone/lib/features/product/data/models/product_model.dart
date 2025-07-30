@@ -15,9 +15,9 @@ class ProductModel extends Product {
     return ProductModel(
       name: json['name'],
       price: json['price'],
-      category: json['category'],
+      category: json['category'] ?? 'Uncategorized',
       description: json['description'],
-      imagePath: json['imagePath'],
+      imagePath: json['imageUrl'],
       id: json['id'],
     );
   }
