@@ -42,6 +42,8 @@ dependencies:
   internet_connection_checker: ^3.0.1
   # For local cacheing
   shared_preferences: ^2.2.2
+  # For api calling
+  dio: ^5.4.3+1
 
 dev_dependencies:
   flutter_test:
