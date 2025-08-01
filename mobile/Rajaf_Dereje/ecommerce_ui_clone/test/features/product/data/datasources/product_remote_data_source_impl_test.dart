@@ -6,6 +6,7 @@ import 'package:mockito/annotations.dart';
 import 'package:dio/dio.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
+import '../repositories/product_repository_impl_test.mocks.dart';
 import 'product_remote_data_source_impl_test.mocks.dart';
 
 @GenerateMocks([Dio])
@@ -160,5 +161,41 @@ void main() {
     });
   }); // delete product group
 
-  group('updateProduct', () {}); // update product group
+  group('updateProduct', () {
+    void updateSetup(int successCode) {
+      when(
+        mockDio.put(
+          any,
+          data: anyNamed('data'),
+          queryParameters: anyNamed('queryParameters'),
+          options: anyNamed('options'),
+          cancelToken: anyNamed('cancelToken'),
+          onSendProgress: anyNamed('onSendProgress'),
+          onReceiveProgress: anyNamed('onReceiveProgress'),
+        ),
+      ).thenAnswer((_) async => createSuccessResponse(null, successCode));
+    }
+
+    test('should complete successfly when status code is 200', () async {
+      // Arrange
+      updateSetup(200);
+
+      // Act
+      final call = dataSource.updateProduct(tProductModel);
+
+      // Assert
+      await expectLater(call, completes);
+    });
+
+    test('should return Server Exception on failuer', () async {
+      // Arrange
+      updateSetup(500);
+
+      // Act
+      final call = dataSource.updateProduct;
+
+      // Assert
+      expect(() => call(tProductModel), throwsA(isA<ServerException>()));
+    });
+  }); // update product group
 } // main
