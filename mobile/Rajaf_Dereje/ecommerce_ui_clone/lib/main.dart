@@ -1,6 +1,6 @@
-import 'pages/add_update_page.dart';
-import 'pages/details_page.dart';
-import 'pages/home_page.dart';
+import 'features/product/presentation/pages/add_update_page.dart';
+import 'features/product/presentation/pages/details_page.dart';
+import 'features/product/presentation/pages/home_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {

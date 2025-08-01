@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../constants/product_model.dart';
+import '../../../../constants/product_model.dart';
 import '../widgets/buttons.dart';
 import '../widgets/text.dart'; // For custom inputs
 
