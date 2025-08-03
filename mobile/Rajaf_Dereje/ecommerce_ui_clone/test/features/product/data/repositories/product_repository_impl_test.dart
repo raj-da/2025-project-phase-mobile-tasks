@@ -10,14 +10,13 @@ import 'package:ecommerce_ui_clone/features/product/data/datasources/product_loc
 import 'package:ecommerce_ui_clone/features/product/data/datasources/product_remote_data_source.dart';
 import 'package:ecommerce_ui_clone/features/product/data/models/product_model.dart';
 import 'package:ecommerce_ui_clone/features/product/data/repositories/product_repository_impl.dart';
-import 'package:ecommerce_ui_clone/features/product/domain/entities/product.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-// This annotation tells build_runner to generate a file with mock classes
-// for the classes listed here.
-// Run flutter pub run build_runner build
+//* This annotation tells build_runner to generate a file with mock classes
+//* for the classes listed here.
+//* Run flutter pub run build_runner build
 @GenerateMocks([ProductRemoteDataSource, ProductLocalDataSource, NetworkInfo])
 import 'product_repository_impl_test.mocks.dart';
 
@@ -38,8 +37,8 @@ void main() {
     );
   });
 
-  // A helper function to run tests for both online and offline states
-  void runTestsOnline(Function body) {
+  //* A helper function to run tests for both online and offline states
+  void runTestsOnline(void Function() body) {
     group('device is online', () {
       setUp(() {
         // Stubbing: Tell mockito that whenever a function (in this case isConnected) is called,
@@ -50,7 +49,7 @@ void main() {
     });
   }
 
-  void runTestsOffline(Function body) {
+  void runTestsOffline(void Function() body) {
     group('device is offline', () {
       setUp(() {
         // Stubbing: Tell mockito that whenever a function (in this case isConnected) is called,
@@ -63,17 +62,16 @@ void main() {
 
   group('getAllProduct', () {
     final tProductModelList = [
-      ProductModel(
+      const ProductModel(
         name: 'test',
         price: 'test',
-        category: 'test',
         description: 'test',
-        imagePath: 'test',
+        imageUrl: 'test',
         id: '1',
       ),
     ];
 
-    // The entity list iw what the UI layer expects
+    // The entity list is what the UI layer expects
     final List<ProductModel> tProductList = tProductModelList;
 
     test('Should check if the device is online', () async {
@@ -145,10 +143,9 @@ void main() {
           // Act
           final result = await repository.getAllProduct();
 
-          // Assert
+          //  Assert
           // We except the repository to catch the ServerException and return a Left(ServerFailure).
-          expect(result, isA<Left<Failure, List<Product>>>());
-          expect((result as Left).value, isA<ServerFailure>());
+          expect(result, equals(const Left((ServerFailure()))));
         },
       );
     }); // runTestsOnline()
@@ -157,7 +154,7 @@ void main() {
       test(
         'should return last locally cached data when the cached data is present',
         () async {
-          // Arrange
+          // Arrangematcher
           // Stubbing: Tell the local mock to return our product list.
           when(
             mockLocalDataSource.getCachedProducts(),
@@ -185,6 +182,8 @@ void main() {
             mockLocalDataSource.getCachedProducts(),
           ).thenThrow(CacheException());
 
+          when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
+
           // Act
           final result = await repository.getAllProduct();
 
@@ -194,11 +193,10 @@ void main() {
           // Verification: We tried to get data from the local source.
           verify(mockLocalDataSource.getCachedProducts());
           // Check that we got a CacheFailure.
-          expect(result, isA<Left<Failure, List<Product>>>());
-          expect((result as Left).value, isA<CachedFailure>());
+          expect(result, const Left(CachedFailure()));
         },
       );
-    });
+    }); // ofline test
   }); // get all product group
 
   group('Delete product', () {
@@ -230,8 +228,7 @@ void main() {
           final result = await repository.deleteProduct(id);
           // Assert
           verify(mockRemoteDataSource.deleteProduct(any));
-          expect(result, isA<Left<Failure, void>>());
-          expect((result as Left).value, isA<ServerFailure>());
+          expect(result, const Left(ServerFailure()));
         },
       );
     }); // online test
@@ -243,19 +240,17 @@ void main() {
 
         // Assert
         verifyZeroInteractions(mockRemoteDataSource);
-        expect(result, isA<Left<Failure, void>>());
-        expect((result as Left).value, isA<NetworkFailure>());
+        expect(result, const Left(NetworkFailure()));
       });
     });
   }); // delete product group
 
   group('Create product', () {
-    ProductModel tproductModel = ProductModel(
+    ProductModel tproductModel = const ProductModel(
       name: 'test',
       price: 'test',
-      category: 'test',
       description: 'test',
-      imagePath: 'test',
+      imageUrl: 'test',
       id: '1',
     );
 
@@ -288,8 +283,7 @@ void main() {
           final result = await repository.createproduct(tproductModel);
           // Assert
           verify(mockRemoteDataSource.createProduct(any));
-          expect(result, isA<Left<Failure, void>>());
-          expect((result as Left).value, isA<ServerFailure>());
+          expect(result, const Left(ServerFailure()));
         },
       );
     }); // online test
@@ -301,20 +295,18 @@ void main() {
 
         // Assert
         verifyZeroInteractions(mockRemoteDataSource);
-        expect(result, isA<Left<Failure, void>>());
-        expect((result as Left).value, isA<NetworkFailure>());
+        expect(result, const Left(NetworkFailure()));
       });
     }); // offline test
   }); // create product group
 
   group('get product by id', () {
     String id = '1';
-    ProductModel tproductModel = ProductModel(
+    ProductModel tproductModel = const ProductModel(
       name: 'test',
       price: 'test',
-      category: 'test',
       description: 'test',
-      imagePath: 'test',
+      imageUrl: 'test',
       id: '1',
     );
 
@@ -331,8 +323,7 @@ void main() {
         // Assert
         verify(mockNetworkInfo.isConnected);
         verify(mockRemoteDataSource.getProductById(id));
-        expect(result, isA<Right<Failure, Product?>>());
-        expect((result as Right).value, isA<Product?>());
+        expect(result, Right(tproductModel));
       });
 
       test(
@@ -347,8 +338,7 @@ void main() {
           final result = await repository.getProductById(id);
           // Assert
           verify(mockRemoteDataSource.getProductById(id));
-          expect(result, isA<Left<Failure, Product?>>());
-          expect((result as Left).value, isA<ServerFailure>());
+          expect(result, const Left(ServerFailure()));
         },
       );
     }); // online test
@@ -360,19 +350,17 @@ void main() {
 
         // Assert
         verifyZeroInteractions(mockRemoteDataSource);
-        expect(result, isA<Left<Failure, Product?>>());
-        expect((result as Left).value, isA<NetworkFailure>());
+        expect(result, const Left(NetworkFailure()));
       });
     }); // offline test
   }); // get product by id group
 
   group('updateProduct', () {
-    ProductModel tProductModel = ProductModel(
+    ProductModel tProductModel = const ProductModel(
       name: 'test',
       price: 'test',
-      category: 'test',
       description: 'test',
-      imagePath: 'test',
+      imageUrl: 'test',
       id: '1',
     );
 
@@ -403,11 +391,10 @@ void main() {
           final result = await repository.updateProduct(tProductModel);
           // Assert
           verify(mockRemoteDataSource.updateProduct(tProductModel));
-          expect(result, isA<Left<Failure, void>>());
-          expect((result as Left).value, isA<ServerFailure>());
+          expect(result, const Left(ServerFailure()));
         },
       );
-    });
+    }); // online test
 
     runTestsOffline(() {
       test('should return NetworkFailure when device is offline', () async {
@@ -415,9 +402,8 @@ void main() {
         final result = await repository.updateProduct(tProductModel);
         // Assert
         verifyZeroInteractions(mockRemoteDataSource);
-        expect(result, isA<Left<Failure, void>>());
-        expect((result as Left).value, isA<NetworkFailure>());
+        expect(result, const Left(NetworkFailure()));
       });
-    });
-  });
+    }); // offline test
+  }); // update product group
 }
