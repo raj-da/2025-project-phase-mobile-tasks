@@ -25,12 +25,12 @@ class ProductRepositoryImpl implements ProductRepository {
     if (await networkInfo.isConnected) {
       try {
         await remoteDataSource.createProduct(product as ProductModel);
-        return Right(null);
+        return const Right(null);
       } on ServerException {
-        return Left(ServerFailure('Server Error'));
+        return const Left(ServerFailure());
       }
     } else {
-      return Left(NetworkFailure('Lost Network connection'));
+      return const Left(NetworkFailure());
     }
   }
 
@@ -39,15 +39,16 @@ class ProductRepositoryImpl implements ProductRepository {
     if (await networkInfo.isConnected) {
       try {
         await remoteDataSource.deleteProduct(id);
-        return Right(null);
+        return const Right(null);
       } on ServerException {
-        return Left(ServerFailure('Server Error'));
+        return const Left(ServerFailure());
       }
     } else {
-      return Left(NetworkFailure('Lost Network connection'));
+      return const Left(NetworkFailure());
     }
   }
 
+  //! Question ? how do we detect CacheFailure when online
   @override
   Future<Either<Failure, List<Product>>> getAllProduct() async {
     if (await networkInfo.isConnected) {
@@ -56,14 +57,14 @@ class ProductRepositoryImpl implements ProductRepository {
         await localDataSource.cacheProductList(remoteProducts);
         return Right(remoteProducts);
       } on ServerException {
-        return Left(ServerFailure('Server Error'));
+        return const Left(ServerFailure());
       }
     } else {
       try {
         final localProducts = await localDataSource.getCachedProducts();
         return Right(localProducts);
       } on CacheException {
-        return Left(CachedFailure('Error no internet connection'));
+        return const Left(CachedFailure());
       }
     }
   }
@@ -75,10 +76,10 @@ class ProductRepositoryImpl implements ProductRepository {
         final product = await remoteDataSource.getProductById(id);
         return Right(product);
       } on ServerException {
-        return Left(ServerFailure('Server Error'));
+        return const Left(ServerFailure());
       }
     } else {
-      return Left(NetworkFailure('Lost Network connection'));
+      return const Left(NetworkFailure());
     }
   }
 
@@ -89,10 +90,10 @@ class ProductRepositoryImpl implements ProductRepository {
         await remoteDataSource.updateProduct(product as ProductModel);
         return const Right(null);
       } on ServerException {
-        return Left(ServerFailure('Server Error'));
+        return const Left(ServerFailure());
       }
     } else {
-      return Left(NetworkFailure('Lost Network connection'));
+      return const Left(NetworkFailure());
     }
   }
 }
