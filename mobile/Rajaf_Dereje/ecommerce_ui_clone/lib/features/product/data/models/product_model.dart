@@ -1,36 +1,39 @@
 import '../../domain/entities/product.dart';
 
 class ProductModel extends Product {
-  ProductModel({
-    required super.name,
-    required super.price,
-    required super.category,
-    required super.description,
-    required super.imagePath,
+  const ProductModel({
     required super.id,
+    required super.name,
+    required super.description,
+    required super.price,
+    required super.imageUrl,
+    // required super.category,
   });
+
+  @override
+  List<Object> get props => [id];
 
   // From JSON
   factory ProductModel.fromJson(Map<String, dynamic> json) {
     return ProductModel(
-      name: json['name'],
-      price: json['price'],
-      category: json['category'] ?? 'Uncategorized',
-      description: json['description'],
-      imagePath: json['imageUrl'],
       id: json['id'],
+      name: json['name'],
+      imageUrl: json['imageUrl'],
+      price: json['price'],
+      description: json['description'],
+      // category: json['category'] ?? 'Uncategorized',
     );
   }
 
   // To JSON
   Map<String, dynamic> toJson() {
     return {
-      'name': name,
-      'price': price,
-      'category': category,
-      'description': description,
-      'imagePath': imagePath,
       'id': id,
+      'name': name,
+      'imageUrl': imageUrl,
+      'price': price,
+      'description': description,
+      // 'category': category,
     };
   }
 }
