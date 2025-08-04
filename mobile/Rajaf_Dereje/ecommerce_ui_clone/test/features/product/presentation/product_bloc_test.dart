@@ -1,154 +1,271 @@
-// import 'package:dartz/dartz.dart';
-// import 'package:ecommerce_ui_clone/core/error/failures.dart' show ServerFailure;
-// import 'package:ecommerce_ui_clone/features/product/domain/entities/product.dart';
-// import 'package:ecommerce_ui_clone/features/product/domain/usecases/create_product_usecase.dart';
-// import 'package:ecommerce_ui_clone/features/product/domain/usecases/delete_product_usecase.dart';
-// import 'package:ecommerce_ui_clone/features/product/domain/usecases/update_product_usecase.dart';
-// import 'package:ecommerce_ui_clone/features/product/domain/usecases/view_all_products_usecase.dart';
-// import 'package:ecommerce_ui_clone/features/product/domain/usecases/view_product_usecase.dart';
-// import 'package:ecommerce_ui_clone/features/product/presentation/bloc/product_bloc.dart';
-// import 'package:equatable/equatable.dart';
-// import 'package:flutter_test/flutter_test.dart';
-// import 'package:mockito/annotations.dart';
-// import 'package:mockito/mockito.dart';
-// import 'package:bloc_test/bloc_test.dart';
+import 'package:bloc_test/bloc_test.dart';
+import 'package:dartz/dartz.dart';
+import 'package:ecommerce_ui_clone/core/error/failures.dart';
+import 'package:ecommerce_ui_clone/features/product/domain/entities/product.dart';
+import 'package:ecommerce_ui_clone/features/product/domain/usecases/create_product_usecase.dart';
+import 'package:ecommerce_ui_clone/features/product/domain/usecases/delete_product_usecase.dart';
+import 'package:ecommerce_ui_clone/features/product/domain/usecases/update_product_usecase.dart';
+import 'package:ecommerce_ui_clone/features/product/domain/usecases/view_all_products_usecase.dart';
+import 'package:ecommerce_ui_clone/features/product/domain/usecases/view_product_usecase.dart';
+import 'package:ecommerce_ui_clone/features/product/presentation/bloc/product_bloc.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
 
-// import 'product_bloc_test.mocks.dart';
+import 'product_bloc_test.mocks.dart';
 
-// @GenerateMocks([
-//   ViewAllProductsUsecase,
-//   ViewProductUsecase,
-//   CreateProductUsecase,
-//   UpdateProductUsecase,
-//   DeleteProductUsecase,
-// ])
-// abstract class Failure extends Equatable {
-//   const Failure([List properties = const <dynamic>[]]);
-// }
+@GenerateMocks([
+  ViewProductUsecase,
+  ViewAllProductsUsecase,
+  CreateProductUsecase,
+  UpdateProductUsecase,
+  DeleteProductUsecase,
+])
+void main() {
+  late ProductBloc bloc;
+  late MockViewAllProductsUsecase mockViewAll;
+  late MockViewProductUsecase mockViewSingle;
+  late MockCreateProductUsecase mockCreate;
+  late MockUpdateProductUsecase mockUpdate;
+  late MockDeleteProductUsecase mockDelete;
 
-// // class ServerFailure extends Failure {
-// //   @override
-// //   List<Object> get props => [];
-// // }
+  setUp(() {
+    mockViewAll = MockViewAllProductsUsecase();
+    mockViewSingle = MockViewProductUsecase();
+    mockCreate = MockCreateProductUsecase();
+    mockUpdate = MockUpdateProductUsecase();
+    mockDelete = MockDeleteProductUsecase();
 
-// // class Right<R> {
-// //   final R value;
-// //   Right(this.value);
-// // }
+    bloc = ProductBloc(
+      viewAllProductsUsecase: mockViewAll,
+      viewProductUsecase: mockViewSingle,
+      createProductUsecase: mockCreate,
+      updateProductUsecase: mockUpdate,
+      deleteProductUsecase: mockDelete,
+    );
+  });
 
-// // class Left<L> {
-// //   final L value;
-// //   Left(this.value);
-// // }
+  //todo change price to double
+  final tProduct = const Product(
+    name: 'Product 1',
+    price: '100.0',
+    description: 'Description',
+    imageUrl: '/image1.png',
+    id: '1',
+  );
+  final tProducts = [tProduct];
 
-// void main() {
-//   late MockViewAllProductsUsecase mockViewAllProductsUsecase;
-//   late MockViewProductUsecase mockViewProductUsecase;
-//   late MockCreateProductUsecase mockCreateProductUsecase;
-//   late MockUpdateProductUsecase mockUpdateProductUsecase;
-//   late MockDeleteProductUsecase mockDeleteProductUsecase;
-//   late ProductBloc productBloc;
+  group('LoadAllProductEvent', () {
+    blocTest<ProductBloc, ProductState>(
+      '''emits [ProductLoading, LoadedAllProductState] 
+      when LoadAllProductEvent is added and Usecase returns success''',
+      build: () {
+        when(mockViewAll()).thenAnswer((_) async => Right(tProducts));
+        return bloc;
+      },
 
-//   // Dummy data for testing
-//   final tProduct = Product(
-//     name: 'Test Product',
-//     price: '200',
-//     category: 'Test category',
-//     description: 'Test descriptioin',
-//     imagePath: 'image',
-//     id: '1',
-//   );
+      act: (bloc) => bloc.add(LoadAllProductEvent()),
 
-//   final tProductList = [tProduct];
-//   // final tFailure = ServerFailure();
+      expect: () => [ProductLoading(), LoadedAllProductState(tProducts)],
+      verify: (_) {
+        verify(mockViewAll()).called(1);
+      },
+    );
 
-//   // setUp runs before each test
-//   setUp(() {
-//     // Initialize the mocks
-//     mockViewAllProductsUsecase = MockViewAllProductsUsecase();
-//     mockViewProductUsecase = MockViewProductUsecase();
-//     mockCreateProductUsecase = MockCreateProductUsecase();
-//     mockUpdateProductUsecase = MockUpdateProductUsecase();
-//     mockDeleteProductUsecase = MockDeleteProductUsecase();
+    blocTest<ProductBloc, ProductState>(
+      '''emits [ProductLoading, ProductError] 
+    when LoadAllProductEven is added and Usecase return Failure''',
+      build: () {
+        when(
+          mockViewAll(),
+        ).thenAnswer((_) async => const Left(ServerFailure()));
+        return bloc;
+      },
 
-//     // Initialize the BLoC with the mocks
-//     productBloc = ProductBloc(
-//       viewAllProductsUsecase: mockViewAllProductsUsecase,
-//       viewProductUsecase: mockViewProductUsecase,
-//       createProductUsecase: mockCreateProductUsecase,
-//       updateProductUsecase: mockUpdateProductUsecase,
-//       deleteProductUsecase: mockDeleteProductUsecase,
-//     );
-//   });
+      act: (bloc) => bloc.add(LoadAllProductEvent()),
 
-//   tearDown(() {
-//     productBloc.close();
-//   });
+      expect: () => [
+        ProductLoading(),
+        ProductError(
+          'Failed to load products: ${const ServerFailure().toString()}',
+        ),
+      ],
+      verify: (_) {
+        verify(mockViewAll()).called(1);
+      },
+    );
+  }); // load all product event group
 
-//   test('initial state should be ProdutInitial', () {
-//     expect(productBloc.state, ProductInitial());
-//   });
+  group('GetSingleProductEvent', () {
+    final tid = '1';
+    blocTest<ProductBloc, ProductState>(
+      '''emits [ProductLoading, LoadedSingleProductState] when
+       GetSingleProductEvent is added and ViewProductUsecase return a success.''',
+      build: () {
+        when(mockViewSingle(tid)).thenAnswer((_) async => Right(tProduct));
+        return bloc;
+      },
+      act: (bloc) => bloc.add(GetSingleProductEvent(id: tid)),
+      expect: () => <ProductState>[
+        ProductLoading(),
+        LoadedSingleProductState(tProduct),
+      ],
 
-//   group('LoadAllProductEvent', () {
-//     blocTest<ProductBloc, ProductState>(
-//       'emits [ProductLoading, LoadedAllProductState] when data is gotten  added.',
-//       build: () {
-//         when(
-//           mockViewAllProductsUsecase(),
-//         ).thenAnswer((_) async => Right(tProductList));
-//         return productBloc;
-//       },
-//       act: (bloc) => bloc.add(LoadAllProductEvent()),
-//       expect: () => <ProductState>[
-//         ProductLoading(),
-//         LoadedAllProductState(tProductList),
-//       ],
-//       verify: (_) => verify(mockViewAllProductsUsecase()).called(1),
-//     );
+      verify: (_) {
+        verify(mockViewSingle(tid)).called(1);
+      },
+    );
 
-//     blocTest(
-//       'should emit [ProductLoading, ProductError] when getting data fails',
-//       build: () {
-//         when(
-//           mockViewAllProductsUsecase(),
-//         ).thenAnswer((_) async => Left(const ServerFailure()));
-//         return productBloc;
-//       },
+    blocTest<ProductBloc, ProductState>(
+      '''emits [ProductLoading, ProductError] when
+       GetSingleProductEvent is added and ViewProductUsecase return a Faliur.''',
+      build: () {
+        when(
+          mockViewSingle(tid),
+        ).thenAnswer((_) async => const Left(ServerFailure()));
+        return bloc;
+      },
+      act: (bloc) => bloc.add(GetSingleProductEvent(id: tid)),
+      expect: () => <ProductState>[
+        ProductLoading(),
+        ProductError(
+          'Failed to load product: ${const ServerFailure().toString()}',
+        ),
+      ],
 
-//       act: (bloc) => bloc.add(LoadAllProductEvent()),
+      verify: (_) {
+        verify(mockViewSingle(tid)).called(1);
+      },
+    );
+  }); // get single product event group
 
-//       expect: () => [
-//         ProductLoading(),
-//         ProductError('Failed to load products: Instance of \'ServerFailure\''),
-//       ],
-//     );
-//   });
+  group('CreateProductEvent', () {
+    blocTest<ProductBloc, ProductState>(
+      '''emits [ProductLoading, LoadedAllProductState] when 
+      CreateProductEvent is added and mockCreate returns a success.''',
+      build: () {
+        when(mockCreate(tProduct)).thenAnswer((_) async => const Right(null));
+        when(mockViewAll()).thenAnswer((_) async => Right(tProducts));
+        return bloc;
+      },
+      act: (bloc) => bloc.add(CreateProductEvent(tProduct)),
+      expect: () => <ProductState>[
+        ProductLoading(),
+        LoadedAllProductState(tProducts),
+      ],
 
-//   group('CreateAllProductEvent', () {
-//     blocTest<ProductBloc, ProductState>(
-//       'emits [ProductLoading, ProductLoading, LoadedAllProductState] on success.',
-//       build: () {
-//         when(
-//           mockCreateProductUsecase(any),
-//         ).thenAnswer((_) async => Right(null));
-//         when(
-//           mockViewAllProductsUsecase(),
-//         ).thenAnswer((_) async => Right(tProductList));
-//         return productBloc;
-//       },
-//       act: (bloc) => bloc.add(CreateProductEvent(tProduct)),
-//       expect: () => <ProductState>[
-//         // ProductLoading(), // From the create event handler
-//         ProductLoading(), // From the subsequent LoadAllProductEvent handler
-//         LoadedAllProductState(tProductList),
-//       ],
+      verify: (_) {
+        verify(mockViewAll()).called(1);
+      },
+    );
 
-//       verify: (_) {
-//         verify(mockCreateProductUsecase(tProduct)).called(1);
-//         verify(
-//           mockViewAllProductsUsecase(),
-//         ).called(1); // Verify the reload happens
-//       },
-//     );
-//   });
-// }
+    blocTest<ProductBloc, ProductState>(
+      '''emits [ProductLoading, ProductError] when
+       CreateProductEvent is added and CreateProductUsecase return a Faliur.''',
+      build: () {
+        when(
+          mockCreate(tProduct),
+        ).thenAnswer((_) async => const Left(ServerFailure()));
+        return bloc;
+      },
+      act: (bloc) => bloc.add(CreateProductEvent(tProduct)),
+      expect: () => <ProductState>[
+        ProductLoading(),
+        ProductError(
+          'Failed to create product: ${const ServerFailure().toString()}',
+        ),
+      ],
+
+      verify: (_) {
+        verify(mockCreate(tProduct)).called(1);
+      },
+    );
+  }); // create product event
+
+  group('UpdateProductEvent', () {
+    blocTest<ProductBloc, ProductState>(
+      '''emits [ProductLoading, LoadedAllProductState] when 
+      UpdateProductEvent is added and mockUpdate returns a success.''',
+      build: () {
+        when(mockUpdate(tProduct)).thenAnswer((_) async => const Right(null));
+        when(mockViewAll()).thenAnswer((_) async => Right(tProducts));
+        return bloc;
+      },
+      act: (bloc) => bloc.add(UpdateProductEvent(tProduct)),
+      expect: () => <ProductState>[
+        ProductLoading(),
+        LoadedAllProductState(tProducts),
+      ],
+
+      verify: (_) {
+        verify(mockViewAll()).called(1);
+      },
+    );
+
+    blocTest<ProductBloc, ProductState>(
+      '''emits [ProductLoading, ProductError] when
+       UpdateProductEvent is added and UpdateProductUsecase return a Faliur.''',
+      build: () {
+        when(
+          mockUpdate(tProduct),
+        ).thenAnswer((_) async => const Left(ServerFailure()));
+        return bloc;
+      },
+      act: (bloc) => bloc.add(UpdateProductEvent(tProduct)),
+      expect: () => <ProductState>[
+        ProductLoading(),
+        ProductError(
+          'Failed to update product: ${const ServerFailure().toString()}',
+        ),
+      ],
+
+      verify: (_) {
+        verify(mockUpdate(tProduct)).called(1);
+      },
+    );
+  }); // update product event
+
+  group('DeleteProductEvent', () {
+    final tId = '1';
+    blocTest<ProductBloc, ProductState>(
+      '''emits [ProductLoading, LoadAllProductEvent] when 
+      DeleteProductEvent is added and mockDelete returns a success.''',
+      build: () {
+        when(mockDelete(tId)).thenAnswer((_) async => const Right(null));
+        when(mockViewAll()).thenAnswer((_) async => Right(tProducts));
+        return bloc;
+      },
+      act: (bloc) => bloc.add(DeleteProductEvent(tId)),
+      expect: () => <ProductState>[
+        ProductLoading(),
+        LoadedAllProductState(tProducts),
+      ],
+
+      verify: (_) {
+        verify(mockViewAll()).called(1);
+      },
+    );
+
+    blocTest<ProductBloc, ProductState>(
+      '''emits [ProductLoading, ProductError] when
+       DeleteProductEvent is added and DeleteProductUsecase return a Faliur.''',
+      build: () {
+        when(
+          mockDelete(tId),
+        ).thenAnswer((_) async => const Left(ServerFailure()));
+        return bloc;
+      },
+      act: (bloc) => bloc.add(DeleteProductEvent(tId)),
+      expect: () => <ProductState>[
+        ProductLoading(),
+        ProductError(
+          'Failed to delete product: ${const ServerFailure().toString()}',
+        ),
+      ],
+
+      verify: (_) {
+        verify(mockDelete(tId)).called(1);
+      },
+    );
+  }); // delete product event group
+}
