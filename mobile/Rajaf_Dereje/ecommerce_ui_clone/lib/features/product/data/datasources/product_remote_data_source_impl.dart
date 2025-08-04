@@ -4,7 +4,7 @@ import '../models/product_model.dart';
 import 'product_remote_data_source.dart';
 
 const String BASE_URL =
-    'https://g5-flutter-learning-path-be.onrender.com/api/v1';
+    'https://g5-flutter-learning-path-be-tvum.onrender.com';
 
 class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
   final Dio dio;

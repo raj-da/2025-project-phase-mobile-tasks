@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../features/product/domain/entities/product.dart';
+import '../../domain/entities/product.dart';
 import 'text.dart';
 
 Widget card(
