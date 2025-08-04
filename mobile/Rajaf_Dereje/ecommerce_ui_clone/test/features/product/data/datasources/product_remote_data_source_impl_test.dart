@@ -29,7 +29,7 @@ void main() {
           'id': '123',
           'name': 'Anime website',
           'description': 'Explore anime characters.',
-          'price': '123',
+          'price': 123,
           'imageUrl': 'https://example.com/image.jpg',
         },
       ],
@@ -88,7 +88,7 @@ void main() {
         'id': '6672776eb905525c145fe0bb',
         'name': 'Anime website',
         'description': 'Explore anime characters.',
-        'price': '123',
+        'price': 123,
         'imageUrl': 'https://test.jpg',
       },
     };
@@ -137,7 +137,7 @@ void main() {
       id: 'any',
       name: 'PC',
       description: 'long description',
-      price: '123',
+      price: 123,
       imageUrl: '/path/to/image.png',
     );
 

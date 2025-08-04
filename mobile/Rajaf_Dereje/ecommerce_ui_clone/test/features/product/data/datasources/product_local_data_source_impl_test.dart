@@ -24,14 +24,14 @@ void main() {
   // Sample data for testing
   final tProductModel1 = const ProductModel(
     name: 'Test Product 1',
-    price: '100',
+    price: 100,
     description: 'Test Description 1',
     imageUrl: '/test1.jpg',
     id: '1',
   );
   final tProductModel2 = const ProductModel(
     name: 'Test Product 2',
-    price: '200',
+    price: 200,
     description: 'Test Description 2',
     imageUrl: '/test2.jpg',
     id: '2',

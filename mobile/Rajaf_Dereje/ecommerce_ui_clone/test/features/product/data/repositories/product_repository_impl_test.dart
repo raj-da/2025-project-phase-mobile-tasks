@@ -64,7 +64,7 @@ void main() {
     final tProductModelList = [
       const ProductModel(
         name: 'test',
-        price: 'test',
+        price: 99.9,
         description: 'test',
         imageUrl: 'test',
         id: '1',
@@ -248,7 +248,7 @@ void main() {
   group('Create product', () {
     ProductModel tproductModel = const ProductModel(
       name: 'test',
-      price: 'test',
+      price: 99.9,
       description: 'test',
       imageUrl: 'test',
       id: '1',
@@ -304,7 +304,7 @@ void main() {
     String id = '1';
     ProductModel tproductModel = const ProductModel(
       name: 'test',
-      price: 'test',
+      price: 99.9,
       description: 'test',
       imageUrl: 'test',
       id: '1',
@@ -358,7 +358,7 @@ void main() {
   group('updateProduct', () {
     ProductModel tProductModel = const ProductModel(
       name: 'test',
-      price: 'test',
+      price: 99.9,
       description: 'test',
       imageUrl: 'test',
       id: '1',

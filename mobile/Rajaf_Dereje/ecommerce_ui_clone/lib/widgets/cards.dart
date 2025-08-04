@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../constants/product_model.dart';
+import '../constants/product_model.dart';
 import 'text.dart';
 
 Widget card(

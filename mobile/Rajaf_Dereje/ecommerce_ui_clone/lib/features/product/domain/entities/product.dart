@@ -4,7 +4,7 @@ import 'package:equatable/equatable.dart';
 
 class Product extends Equatable {
   final String name;
-  final String price;
+  final double price;
   // final String category;
   final String description;
   final String imageUrl;

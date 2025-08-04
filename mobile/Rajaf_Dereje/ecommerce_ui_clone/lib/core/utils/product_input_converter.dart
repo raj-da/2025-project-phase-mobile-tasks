@@ -42,7 +42,7 @@ class ProductInputConverter {
         id: id,
         name: name.trim(),
         description: description.trim(),
-        price: price.toStringAsFixed(2),
+        price: price,
         imageUrl: imageUrl.trim(),
       ),
     );

@@ -7,7 +7,7 @@ void main() {
     id: '1',
     name: 'Test Product',
     description: 'A test product',
-    price: '99',
+    price: 99.0,
     imageUrl: 'test.png',
   );
 
@@ -16,7 +16,7 @@ void main() {
     'id': '1',
     'name': 'Test Product',
     'description': 'A test product',
-    'price': '99',
+    'price': 99.0,
     'imageUrl': 'test.png',
   };
 
