@@ -24,3 +24,23 @@ class CachedFailure extends Failure {
 class NetworkFailure extends Failure {
   const NetworkFailure({super.messege = 'Network Failure'});
 }
+
+class InvalidNameFailure extends Failure {
+  const InvalidNameFailure({super.messege = 'Invalid Name'});
+}
+
+class InvalidDescriptionFailure extends Failure {
+  const InvalidDescriptionFailure({super.messege = 'Invalid Description'});
+}
+
+class InvalidImageFailure extends Failure {
+  const InvalidImageFailure({super.messege = 'Image upload Failure'});
+}
+
+class InvalidPriceFailure extends Failure {
+  const InvalidPriceFailure({super.messege = 'Invalid Price'});
+}
+
+class InvalidIdFailure extends Failure {
+  const InvalidIdFailure({super.messege = 'Invalid Id'});
+}
