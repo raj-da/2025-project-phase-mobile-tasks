@@ -136,72 +136,78 @@ class _DetailsPageState extends State<DetailsPage> {
             ),
 
             const SizedBox(height: 13),
-            customText(
-              text: product.description,
-              size: 20,
-              color: Colors.grey,
-              isBold: true,
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: customText(
+                text: product.description,
+                size: 20,
+                color: Colors.grey,
+                isBold: true,
+              ),
             ),
 
             const SizedBox(height: 10),
-            Row(
-              children: [
-                Expanded(
-                  child: SizedBox(
-                    height: 50,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+            Padding(
+              padding: const EdgeInsets.all(5),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: SizedBox(
+                      height: 50,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          side: const BorderSide(color: Colors.red),
                         ),
-                        side: const BorderSide(color: Colors.red),
-                      ),
-                      onPressed: () {
-                        context.read<ProductBloc>().add(
-                          DeleteProductEvent(product.id),
-                        );
-                        Navigator.pushNamed(context, '/');
-                      },
-                      child: Center(
-                        child: customText(
-                          text: 'DELETE',
-                          size: 22,
-                          color: Colors.red,
-                          isBold: true,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 12), // spacing between buttons
-                Expanded(
-                  child: SizedBox(
-                    height: 50,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        backgroundColor: Colors.deepPurple,
-                      ),
-                      onPressed: () {
-                        context.read<ProductBloc>().add(
-                          ToUpdateEvent(product: product),
-                        );
-                        Navigator.pushNamed(context, '/addUpdate');
-                      },
-                      child: Center(
-                        child: customText(
-                          text: 'UPDATE',
-                          size: 22,
-                          color: Colors.white,
-                          isBold: true,
+                        onPressed: () {
+                          context.read<ProductBloc>().add(
+                            DeleteProductEvent(product.id),
+                          );
+                          Navigator.pushNamed(context, '/');
+                        },
+                        child: Center(
+                          child: customText(
+                            text: 'DELETE',
+                            size: 22,
+                            color: Colors.red,
+                            isBold: true,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                  const SizedBox(width: 12), // spacing between buttons
+                  Expanded(
+                    child: SizedBox(
+                      height: 50,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          backgroundColor: Colors.deepPurple,
+                        ),
+                        onPressed: () {
+                          context.read<ProductBloc>().add(
+                            ToUpdateEvent(product: product),
+                          );
+                          Navigator.pushNamed(context, '/addUpdate');
+                        },
+                        child: Center(
+                          child: customText(
+                            text: 'UPDATE',
+                            size: 22,
+                            color: Colors.white,
+                            isBold: true,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

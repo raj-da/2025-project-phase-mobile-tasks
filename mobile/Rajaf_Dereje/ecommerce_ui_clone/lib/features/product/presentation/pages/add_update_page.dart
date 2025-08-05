@@ -187,6 +187,7 @@ class _AddUpdatePageState extends State<AddUpdatePage> {
 
                         addUpdateButton(
                           buttonTitle: 'Clear',
+                          color: const Color.fromARGB(255, 59, 161, 244),
                           onpressed: () {
                             clearForm();
                           },
