@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../widgets/cards.dart';
-import '../../domain/entities/product.dart';
 import '../bloc/product_bloc.dart';
 import '../widgets/icons.dart';
 import '../widgets/text.dart';
@@ -114,12 +113,9 @@ class _HomePageState extends State<HomePage> {
                             context,
                             product: product,
                             onTap: () {
-                              context.read<ProductBloc>().add(
-                                ToUpdateEvent(product: product),
-                              );
                               Navigator.pushNamed(
                                 context,
-                                '/addUpdate',
+                                '/details',
                                 arguments: product,
                               );
                             },

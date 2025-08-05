@@ -34,7 +34,6 @@ class _AddUpdatePageState extends State<AddUpdatePage> {
 
   double pagePadding = 20.0;
   bool _isFirstTime = true;
-  bool _isEditing = false;
 
   @override
   void didChangeDependencies() {
@@ -45,7 +44,6 @@ class _AddUpdatePageState extends State<AddUpdatePage> {
       productToEdit ??= ModalRoute.of(context)!.settings.arguments as Product?;
       if (productToEdit != null) {
         _fillForm();
-        _isEditing = true;
       }
       _isFirstTime = false;
     }
@@ -195,25 +193,33 @@ class _AddUpdatePageState extends State<AddUpdatePage> {
                         ),
                       ],
                     );
-                  } else {
+                  } else if (state is ToUpdateState) {
+                    productToEdit = state.product;
+                    _fillForm();
                     return Column(
                       children: [
                         addUpdateButton(
                           buttonTitle: 'Update',
                           onpressed: () {
-                            if (_formKey.currentState!.validate() &&
-                                _selectedImageUrl != null) {
-                              //! Add error handling and pop up messege for it
+                            if (_formKey.currentState!.validate()) {
+                              //todo: create a method just for the fields for the update
                               final newProduct = ProductInputConverter()
                                   .convertFormToProduct(
                                     name: _productName.text,
                                     description: _productDescription.text,
                                     priceStr: _productPrice.text,
-                                    imageUrl: _selectedImageUrl!,
+                                    imageUrl: '/dummy',
                                     id: _productId.text,
                                   );
 
-                              Navigator.pop(context, newProduct);
+                              //todo: handle pop ups for incorrect filds
+                              newProduct.fold((failure) => {}, (product) {
+                                context.read<ProductBloc>().add(
+                                  UpdateProductEvent(product),
+                                );
+
+                                Navigator.pushNamed(context, '/');
+                              });
                             } else {
                               //! Add pop up messege
                             }
@@ -223,6 +229,10 @@ class _AddUpdatePageState extends State<AddUpdatePage> {
                         deleteButton(buttonTitle: 'DELETE', onpressed: () {}),
                       ],
                     );
+                    //! Edge case: what if it is neither of those two
+                    //todo: handle this edge case
+                  } else {
+                    return const Center(child: Text('Unkown Error'));
                   }
                 },
               ),
