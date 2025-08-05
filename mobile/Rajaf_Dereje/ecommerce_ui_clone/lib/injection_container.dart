@@ -13,12 +13,13 @@ import 'features/product/domain/repositories/product_repository.dart';
 import 'features/product/domain/usecases/create_product_usecase.dart';
 import 'features/product/domain/usecases/delete_product_usecase.dart';
 import 'features/product/domain/usecases/update_product_usecase.dart';
+import 'features/product/domain/usecases/view_all_products_usecase.dart';
 import 'features/product/domain/usecases/view_product_usecase.dart';
 import 'features/product/presentation/bloc/product_bloc.dart';
 
 final sl = GetIt.instance;
 
-void init() async {
+Future<void> init() async {
   //! Features - Product
   // Bloc
   sl.registerFactory(
@@ -36,7 +37,7 @@ void init() async {
   sl.registerLazySingleton(() => DeleteProductUsecase(sl()));
   sl.registerLazySingleton(() => UpdateProductUsecase(sl()));
   sl.registerLazySingleton(() => ViewProductUsecase(sl()));
-  sl.registerLazySingleton(() => ViewProductUsecase(sl()));
+  sl.registerLazySingleton(() => ViewAllProductsUsecase(sl()));
 
   // Repository
   sl.registerLazySingleton<ProductRepository>(
