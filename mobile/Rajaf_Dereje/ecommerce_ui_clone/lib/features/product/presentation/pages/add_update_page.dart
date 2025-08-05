@@ -34,6 +34,7 @@ class _AddUpdatePageState extends State<AddUpdatePage> {
 
   double pagePadding = 20.0;
   bool _isFirstTime = true;
+  bool _isEditing = false;
 
   @override
   void didChangeDependencies() {
@@ -44,6 +45,7 @@ class _AddUpdatePageState extends State<AddUpdatePage> {
       productToEdit ??= ModalRoute.of(context)!.settings.arguments as Product?;
       if (productToEdit != null) {
         _fillForm();
+        _isEditing = true;
       }
       _isFirstTime = false;
     }
@@ -95,9 +97,24 @@ class _AddUpdatePageState extends State<AddUpdatePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            context.read<ProductBloc>().add(LoadAllProductEvent());
+            Navigator.pop(context);
+          },
+        ),
         centerTitle: true,
         // leading: Icon(Icons.arrow_back_ios_new, color: Colors.deepPurple),
-        title: const Text('Add Product'),
+        title: BlocBuilder<ProductBloc, ProductState>(
+          builder: (context, state) {
+            if (state is ToCreateState) {
+              return const Text('Add Product');
+            } else {
+              return const Text('Update Product');
+            }
+          },
+        ),
       ),
 
       body: Padding(
@@ -138,29 +155,77 @@ class _AddUpdatePageState extends State<AddUpdatePage> {
               ),
               const SizedBox(height: 10),
 
-              addUpdateButton(
-                buttonTitle: 'Add',
-                onpressed: () {
-                  if (_formKey.currentState!.validate() &&
-                      _selectedImageUrl != null) {
-                    //! Add error handling and pop up messege for it
-                    final newProduct = ProductInputConverter()
-                        .convertFormToProduct(
-                          name: _productName.text,
-                          description: _productDescription.text,
-                          priceStr: _productPrice.text,
-                          imageUrl: _selectedImageUrl!,
-                          id: _productId.text,
-                        );
+              BlocBuilder<ProductBloc, ProductState>(
+                builder: (context, state) {
+                  if (state is ToCreateState) {
+                    return Column(
+                      children: [
+                        addUpdateButton(
+                          buttonTitle: 'Add',
+                          onpressed: () {
+                            if (_formKey.currentState!.validate() &&
+                                _selectedImageUrl != null) {
+                              //! Add error handling and pop up messege for it
+                              final result = ProductInputConverter()
+                                  .convertFormToProduct(
+                                    name: _productName.text,
+                                    description: _productDescription.text,
+                                    priceStr: _productPrice.text,
+                                    imageUrl: _selectedImageUrl!,
+                                    id: _productId.text,
+                                  );
 
-                    Navigator.pop(context, newProduct);
+                              result.fold((failure) {}, (product) {
+                                context.read<ProductBloc>().add(
+                                  CreateProductEvent(product),
+                                );
+                                Navigator.pop(context, product);
+                              });
+                            } else {
+                              //! Add pop up messege
+                            }
+                          },
+                        ),
+
+                        addUpdateButton(
+                          buttonTitle: 'Clear',
+                          onpressed: () {
+                            clearForm();
+                          },
+                        ),
+                      ],
+                    );
                   } else {
-                    //! Add pop up messege
+                    return Column(
+                      children: [
+                        addUpdateButton(
+                          buttonTitle: 'Update',
+                          onpressed: () {
+                            if (_formKey.currentState!.validate() &&
+                                _selectedImageUrl != null) {
+                              //! Add error handling and pop up messege for it
+                              final newProduct = ProductInputConverter()
+                                  .convertFormToProduct(
+                                    name: _productName.text,
+                                    description: _productDescription.text,
+                                    priceStr: _productPrice.text,
+                                    imageUrl: _selectedImageUrl!,
+                                    id: _productId.text,
+                                  );
+
+                              Navigator.pop(context, newProduct);
+                            } else {
+                              //! Add pop up messege
+                            }
+                          },
+                        ),
+
+                        deleteButton(buttonTitle: 'DELETE', onpressed: () {}),
+                      ],
+                    );
                   }
                 },
               ),
-
-              deleteButton(buttonTitle: 'DELETE', onpressed: () {}),
             ],
           ),
         ),

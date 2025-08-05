@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../widgets/cards.dart';
+import '../../domain/entities/product.dart';
 import '../bloc/product_bloc.dart';
 import '../widgets/icons.dart';
 import '../widgets/text.dart';
@@ -113,9 +114,12 @@ class _HomePageState extends State<HomePage> {
                             context,
                             product: product,
                             onTap: () {
+                              context.read<ProductBloc>().add(
+                                ToUpdateEvent(product: product),
+                              );
                               Navigator.pushNamed(
                                 context,
-                                '/details',
+                                '/addUpdate',
                                 arguments: product,
                               );
                             },
@@ -128,6 +132,11 @@ class _HomePageState extends State<HomePage> {
                   if (state is ProductError) {
                     return Center(child: Text(state.message));
                   }
+
+                  // case 4: success messge
+                  if (state is ProductSuccess) {
+                    return Center(child: Text('Product created successfuly'));
+                  }
                   // Default/Initial state
                   return Center(child: customText(text: 'Welcome!', size: 40));
                 },
@@ -138,6 +147,7 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          context.read<ProductBloc>().add(ToCreateEvent());
           Navigator.pushNamed(context, '/addUpdate');
         },
         shape: const CircleBorder(),

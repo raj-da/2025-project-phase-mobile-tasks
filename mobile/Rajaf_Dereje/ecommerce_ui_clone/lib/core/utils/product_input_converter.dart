@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 
+import '../../features/product/data/models/product_model.dart';
 import '../../features/product/domain/entities/product.dart';
 import '../error/failures.dart';
 
@@ -27,9 +28,9 @@ class ProductInputConverter {
       return const Left(InvalidIdFailure());
     }
 
-    double? price;
+    int? price;
     try {
-      price = double.parse(priceStr);
+      price = int.parse(priceStr);
       if (price <= 0) {
         return const Left(InvalidPriceFailure());
       }
@@ -38,7 +39,7 @@ class ProductInputConverter {
     }
 
     return Right(
-      Product(
+      ProductModel(
         id: id,
         name: name.trim(),
         description: description.trim(),
