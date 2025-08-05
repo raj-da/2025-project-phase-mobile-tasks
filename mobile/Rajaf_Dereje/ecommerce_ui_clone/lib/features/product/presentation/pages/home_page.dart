@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../widgets/cards.dart';
 import '../bloc/product_bloc.dart';
+import '../widgets/cards.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/icons.dart';
 import '../widgets/text.dart';
