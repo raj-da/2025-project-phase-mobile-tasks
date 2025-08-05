@@ -95,9 +95,24 @@ class _AddUpdatePageState extends State<AddUpdatePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            context.read<ProductBloc>().add(LoadAllProductEvent());
+            Navigator.pop(context);
+          },
+        ),
         centerTitle: true,
         // leading: Icon(Icons.arrow_back_ios_new, color: Colors.deepPurple),
-        title: const Text('Add Product'),
+        title: BlocBuilder<ProductBloc, ProductState>(
+          builder: (context, state) {
+            if (state is ToCreateState) {
+              return const Text('Add Product');
+            } else {
+              return const Text('Update Product');
+            }
+          },
+        ),
       ),
 
       body: Padding(
@@ -138,29 +153,90 @@ class _AddUpdatePageState extends State<AddUpdatePage> {
               ),
               const SizedBox(height: 10),
 
-              addUpdateButton(
-                buttonTitle: 'Add',
-                onpressed: () {
-                  if (_formKey.currentState!.validate() &&
-                      _selectedImageUrl != null) {
-                    //! Add error handling and pop up messege for it
-                    final newProduct = ProductInputConverter()
-                        .convertFormToProduct(
-                          name: _productName.text,
-                          description: _productDescription.text,
-                          priceStr: _productPrice.text,
-                          imageUrl: _selectedImageUrl!,
-                          id: _productId.text,
-                        );
+              BlocBuilder<ProductBloc, ProductState>(
+                builder: (context, state) {
+                  if (state is ToCreateState) {
+                    return Column(
+                      children: [
+                        addUpdateButton(
+                          buttonTitle: 'Add',
+                          onpressed: () {
+                            if (_formKey.currentState!.validate() &&
+                                _selectedImageUrl != null) {
+                              //! Add error handling and pop up messege for it
+                              final result = ProductInputConverter()
+                                  .convertFormToProduct(
+                                    name: _productName.text,
+                                    description: _productDescription.text,
+                                    priceStr: _productPrice.text,
+                                    imageUrl: _selectedImageUrl!,
+                                    id: _productId.text,
+                                  );
 
-                    Navigator.pop(context, newProduct);
+                              result.fold((failure) {}, (product) {
+                                context.read<ProductBloc>().add(
+                                  CreateProductEvent(product),
+                                );
+                                Navigator.pop(context, product);
+                              });
+                            } else {
+                              //! Add pop up messege
+                            }
+                          },
+                        ),
+
+                        addUpdateButton(
+                          buttonTitle: 'Clear',
+                          color: const Color.fromARGB(255, 59, 161, 244),
+                          onpressed: () {
+                            clearForm();
+                          },
+                        ),
+                      ],
+                    );
+                  } else if (state is ToUpdateState) {
+                    productToEdit = state.product;
+                    _fillForm();
+                    return Column(
+                      children: [
+                        addUpdateButton(
+                          buttonTitle: 'Update',
+                          onpressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              //todo: create a method just for the fields for the update
+                              final newProduct = ProductInputConverter()
+                                  .convertFormToProduct(
+                                    name: _productName.text,
+                                    description: _productDescription.text,
+                                    priceStr: _productPrice.text,
+                                    imageUrl: '/dummy',
+                                    id: _productId.text,
+                                  );
+
+                              //todo: handle pop ups for incorrect filds
+                              newProduct.fold((failure) => {}, (product) {
+                                context.read<ProductBloc>().add(
+                                  UpdateProductEvent(product),
+                                );
+
+                                Navigator.pushNamed(context, '/');
+                              });
+                            } else {
+                              //! Add pop up messege
+                            }
+                          },
+                        ),
+
+                        deleteButton(buttonTitle: 'DELETE', onpressed: () {}),
+                      ],
+                    );
+                    //! Edge case: what if it is neither of those two
+                    //todo: handle this edge case
                   } else {
-                    //! Add pop up messege
+                    return const Center(child: Text('Unkown Error'));
                   }
                 },
               ),
-
-              deleteButton(buttonTitle: 'DELETE', onpressed: () {}),
             ],
           ),
         ),

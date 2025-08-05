@@ -48,7 +48,7 @@ void main() {
   //todo change price to double
   final tProduct = const Product(
     name: 'Product 1',
-    price: 100.0,
+    price: 100,
     description: 'Description',
     imageUrl: '/image1.png',
     id: '1',

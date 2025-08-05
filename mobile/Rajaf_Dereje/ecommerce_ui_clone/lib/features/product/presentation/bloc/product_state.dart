@@ -45,3 +45,16 @@ class ProductError extends ProductState {
   @override
   List<Object> get props => [message];
 }
+
+// when user goes to update page
+class ToUpdateState extends ProductState {
+  final Product product;
+
+  const ToUpdateState(this.product);
+
+  @override
+  List<Object> get props => [product];
+}
+
+// when user goes to create page
+class ToCreateState extends ProductState {}

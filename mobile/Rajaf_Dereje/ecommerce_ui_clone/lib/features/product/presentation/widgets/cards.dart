@@ -16,13 +16,10 @@ Widget card(
         child: Column(
           children: [
             ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-              child: Image.network(
-                product.imageUrl,
-                width: double.infinity,
-                height: 200,
-                fit: BoxFit.cover,
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(12),
               ),
+              child: productImage(product.imageUrl),
 
               // place holder image
               // child: Image.network(
@@ -80,4 +77,22 @@ Widget card(
       ),
     ),
   );
+}
+
+Widget productImage(String url) {
+  if (url.startsWith('http')) {
+    return Image.network(
+      url,
+      width: double.infinity,
+      height: 200,
+      fit: BoxFit.cover,
+    );
+  } else {
+    return Image.network(
+      url,
+      width: double.infinity,
+      height: 200,
+      fit: BoxFit.cover,
+    );
+  }
 }

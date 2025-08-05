@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../widgets/cards.dart';
 import '../bloc/product_bloc.dart';
+import '../widgets/custom_app_bar.dart';
 import '../widgets/icons.dart';
 import '../widgets/text.dart';
 
@@ -20,57 +21,11 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: const CustomAppBar(),
       body: Padding(
         padding: EdgeInsets.all(homePagePadding),
         child: Column(
           children: [
-            // Profile and notification
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // Profile and greeting
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    // profile picture
-                    Container(
-                      decoration: BoxDecoration(
-                        color: const Color.fromARGB(255, 221, 219, 219),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      height: profilePictureHeight,
-                      width: profilePictureWidth,
-                    ),
-
-                    const SizedBox(width: 10),
-
-                    // Greetings
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        customText(text: 'July 19, 2025', size: 12),
-
-                        // hello messege
-                        Row(
-                          children: [
-                            customText(text: 'Hello, ', size: 22),
-                            customText(text: 'Rajaf', size: 22, isBold: true),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-
-                // notification Icon
-                squareIcon(
-                  icon: Icons.notifications_none,
-                  iconColor: const Color.fromARGB(255, 90, 87, 87),
-                ),
-              ],
-            ),
-            const SizedBox(height: 30),
 
             // Available product and search Icon
             //todo: configure square Icon box size
@@ -128,6 +83,11 @@ class _HomePageState extends State<HomePage> {
                   if (state is ProductError) {
                     return Center(child: Text(state.message));
                   }
+
+                  // case 4: success messge
+                  if (state is ProductSuccess) {
+                    return const Center(child: Text('Product created successfuly'));
+                  }
                   // Default/Initial state
                   return Center(child: customText(text: 'Welcome!', size: 40));
                 },
@@ -138,6 +98,7 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          context.read<ProductBloc>().add(ToCreateEvent());
           Navigator.pushNamed(context, '/addUpdate');
         },
         shape: const CircleBorder(),
