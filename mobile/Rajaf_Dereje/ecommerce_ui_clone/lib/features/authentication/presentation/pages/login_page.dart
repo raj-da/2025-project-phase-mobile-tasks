@@ -2,15 +2,24 @@ import 'package:flutter/material.dart';
 
 import '../../../product/presentation/widgets/text.dart';
 import '../widgets/buttons.dart';
+import '../widgets/input_field.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final emailController = TextEditingController();
-    final passwordController = TextEditingController();
+  State<LoginPage> createState() => _LoginPageState();
+}
 
+class _LoginPageState extends State<LoginPage> {
+  final _formKey = GlobalKey<FormState>();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  double formInputTypeSize = 15;
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -59,24 +68,32 @@ class LoginPage extends StatelessWidget {
 
               const SizedBox(height: 32),
 
-              customText(text: 'Email', size: 15),
-              const SizedBox(height: 5),
-              // Email Field
-              textInput(
-                controller: emailController,
-                hintText: 'ex: jon.smith@email.com',
-                inputType: TextInputType.emailAddress,
-              ),
+              Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    customText(text: 'Email', size: formInputTypeSize),
+                    const SizedBox(height: 5),
+                    // Email Field
+                    textInput(
+                      controller: emailController,
+                      hintText: 'ex: jon.smith@email.com',
+                      inputType: TextInputType.emailAddress,
+                    ),
 
-              const SizedBox(height: 20),
+                    const SizedBox(height: 20),
 
-              customText(text: 'Password', size: 15),
-              const SizedBox(height: 5),
-              // Password Field
-              textInput(
-                controller: passwordController,
-                hintText: '********',
-                inputType: TextInputType.visiblePassword,
+                    customText(text: 'Password', size: formInputTypeSize),
+                    const SizedBox(height: 5),
+                    // Password Field
+                    textInput(
+                      controller: passwordController,
+                      hintText: '********',
+                      inputType: TextInputType.visiblePassword,
+                    ),
+                  ],
+                ),
               ),
 
               const SizedBox(height: 40),
@@ -95,10 +112,7 @@ class LoginPage extends StatelessWidget {
                     child: RichText(
                       text: const TextSpan(
                         text: 'Don’t have an account? ',
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 14,
-                        ),
+                        style: TextStyle(color: Colors.grey, fontSize: 14),
                         children: [
                           TextSpan(
                             text: 'SIGN UP',
@@ -113,41 +127,12 @@ class LoginPage extends StatelessWidget {
                   ),
                 ),
               ),
+
+              const Spacer(),
             ],
           ),
         ),
       ),
     );
   }
-}
-
-// Your existing textInput function:
-Widget textInput({
-  required TextEditingController controller,
-  int maxLines = 1,
-  String hintText = '',
-  TextInputType inputType = TextInputType.text,
-}) {
-  return TextFormField(
-    maxLines: maxLines,
-    decoration: InputDecoration(
-      hintText: hintText,
-      enabledBorder: InputBorder.none,
-      focusedBorder: OutlineInputBorder(
-        borderSide: const BorderSide(color: Colors.white),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-      filled: true,
-      fillColor: const Color.fromARGB(255, 241, 240, 240),
-    ),
-    controller: controller,
-    validator: (value) {
-      if (value == null || value.isEmpty) {
-        return "This Field can't be empty";
-      }
-      return null;
-    },
-    keyboardType: inputType,
-  );
 }
