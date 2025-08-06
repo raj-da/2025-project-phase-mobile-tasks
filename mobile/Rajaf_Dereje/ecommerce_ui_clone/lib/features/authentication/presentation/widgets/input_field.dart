@@ -20,9 +20,7 @@ Widget textInput({
       filled: true,
       fillColor: const Color.fromARGB(255, 241, 240, 240),
     ),
-
     controller: controller,
-
     validator: (value) {
       if (value == null || value.isEmpty) {
         return "This Field can't be empty";
