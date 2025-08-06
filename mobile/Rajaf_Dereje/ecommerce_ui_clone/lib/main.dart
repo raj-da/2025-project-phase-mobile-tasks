@@ -5,6 +5,7 @@ import 'features/product/presentation/bloc/product_bloc.dart';
 import 'features/product/presentation/pages/add_update_page.dart';
 import 'features/product/presentation/pages/details_page.dart';
 import 'features/product/presentation/pages/home_page.dart';
+import 'features/splash/presentation/splash_screen.dart';
 import 'injection_container.dart' as di;
 
 void main() async {
@@ -24,7 +25,8 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         initialRoute: '/',
         routes: {
-          '/': (context) => const HomePage(),
+          '/': (context) => const SplashScreen(),
+          '/home': (context) => const HomePage(),
           '/addUpdate': (context) => const AddUpdatePage(),
           '/details': (context) => const DetailsPage(),
         },
