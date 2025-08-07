@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'features/authentication/presentation/bloc/auth_bloc.dart';
+import 'features/authentication/presentation/pages/login_page.dart';
+import 'features/authentication/presentation/pages/sign_up_page.dart';
 import 'features/product/presentation/bloc/product_bloc.dart';
 import 'features/product/presentation/pages/add_update_page.dart';
 import 'features/product/presentation/pages/details_page.dart';
@@ -20,8 +23,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<ProductBloc>(
-      create: (context) => di.sl<ProductBloc>()..add(LoadAllProductEvent()),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => di.sl<ProductBloc>()..add(LoadAllProductEvent()),),
+        BlocProvider(create: (context) => di.sl<AuthBloc>(),)
+      ],
       child: MaterialApp(
         initialRoute: '/',
         routes: {
@@ -29,6 +35,8 @@ class MyApp extends StatelessWidget {
           '/home': (context) => const HomePage(),
           '/addUpdate': (context) => const AddUpdatePage(),
           '/details': (context) => const DetailsPage(),
+          '/login': (context) => const LoginPage(),
+          '/signUp': (context) => const SignUpPage(),
         },
         debugShowCheckedModeBanner: false,
       ),

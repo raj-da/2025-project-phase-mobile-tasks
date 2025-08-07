@@ -1,9 +1,10 @@
 import 'package:dio/dio.dart';
+import 'package:http_parser/http_parser.dart';
+import 'package:mime/mime.dart';
+
 import '../../../../core/error/exception.dart';
 import '../models/product_model.dart';
 import 'product_remote_data_source.dart';
-import 'package:mime/mime.dart';
-import 'package:http_parser/http_parser.dart';
 
 const String BASE_URL =
     'https://g5-flutter-learning-path-be-tvum.onrender.com/api/v1';

@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter/foundation.dart';
 
 import '../../../../core/error/exception.dart';
 import '../../../../core/error/failures.dart';
@@ -28,12 +29,26 @@ class AuthRepositoryImpl implements AuthRepository {
   }) async {
     if (await networkInfo.isConnected) {
       try {
+        debugPrint(
+          "###################Enter login try block###################",
+        );
         final token = await authRemoteDataSource.logInUser(
           email: email,
           password: password,
         );
+        debugPrint("###################got token###################");
+
+        debugPrint('###############CACHE token was called##############');
         await authLocalDataSource.cacheAuthToken(authToken: token);
-        UserModel userModel = await authRemoteDataSource.getCurrentUser(token: token);
+        debugPrint('###############CACHE token was ended##############');
+
+        debugPrint('###############get cuurent user was called##############');
+
+        UserModel userModel = await authRemoteDataSource.getCurrentUser(
+          token: token,
+        );
+        debugPrint('###############get cuurent was ended##############');
+        
         return Right(userModel.toUser());
       } on ServerException {
         return const Left(ServerFailure(messege: 'Server Error logging in'));
