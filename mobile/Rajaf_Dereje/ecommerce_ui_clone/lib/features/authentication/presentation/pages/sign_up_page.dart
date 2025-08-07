@@ -15,13 +15,22 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
 
-  final nameController = TextEditingController();
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-  final confirmPasswordController = TextEditingController();
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
 
   double formInputNameSize = 13.5;
   bool _isChecked = false; // for the term and codition checkbox
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,9 +60,10 @@ class _SignUpPageState extends State<SignUpPage> {
                     const SizedBox(height: 5),
                     // Email Field
                     textInput(
-                      controller: nameController,
+                      controller: _nameController,
                       hintText: 'ex: jon smith',
                       inputType: TextInputType.emailAddress,
+                      invalidInputMessege: 'Please enter a valid name',
                     ),
 
                     const SizedBox(height: 10),
@@ -61,9 +71,10 @@ class _SignUpPageState extends State<SignUpPage> {
                     customText(text: 'Email', size: formInputNameSize),
                     const SizedBox(height: 5),
                     textInput(
-                      controller: emailController,
+                      controller: _emailController,
                       hintText: 'ex: jon.smith@gmail.com',
                       inputType: TextInputType.emailAddress,
+                      invalidInputMessege: 'please enter a valid email',
                     ),
 
                     const SizedBox(height: 10),
@@ -72,9 +83,10 @@ class _SignUpPageState extends State<SignUpPage> {
                     const SizedBox(height: 5),
                     // Password Field
                     textInput(
-                      controller: passwordController,
+                      controller: _passwordController,
                       hintText: '********',
                       inputType: TextInputType.visiblePassword,
+                      invalidInputMessege: 'Please enter a valid password',
                     ),
 
                     const SizedBox(height: 10),
@@ -86,12 +98,13 @@ class _SignUpPageState extends State<SignUpPage> {
                     const SizedBox(height: 5),
                     // Password Field
                     textInput(
-                      controller: confirmPasswordController,
+                      controller: _confirmPasswordController,
                       hintText: '********',
                       inputType: TextInputType.visiblePassword,
+                      invalidInputMessege: 'Please enter your password again',
                     ),
 
-                    const SizedBox(height: 5,),
+                    const SizedBox(height: 5),
 
                     Row(
                       children: [
@@ -107,7 +120,10 @@ class _SignUpPageState extends State<SignUpPage> {
                         RichText(
                           text: const TextSpan(
                             text: 'I understood the  ',
-                            style: TextStyle(color: Color.fromARGB(255, 5, 5, 5), fontSize: 14),
+                            style: TextStyle(
+                              color: Color.fromARGB(255, 5, 5, 5),
+                              fontSize: 14,
+                            ),
                             children: [
                               TextSpan(
                                 text: 'Term & policy',
@@ -126,7 +142,13 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
 
               const SizedBox(height: 5),
-              signButton(buttonTitle: 'SIGN IN', radius: 8, onpressed: () {}),
+              signButton(
+                buttonTitle: 'SIGN IN',
+                radius: 8,
+                onpressed: () {
+                  _formKey.currentState!.validate();
+                },
+              ),
 
               const Spacer(),
 
@@ -135,7 +157,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   padding: const EdgeInsets.only(bottom: 16),
                   child: GestureDetector(
                     onTap: () {
-                      print('don\'t have an account');
+                      Navigator.pushNamed(context, '/login');
                     },
                     child: RichText(
                       text: const TextSpan(

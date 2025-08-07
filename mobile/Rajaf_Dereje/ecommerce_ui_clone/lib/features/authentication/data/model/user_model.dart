@@ -1,4 +1,3 @@
-
 import '../../domain/entity/user.dart';
 
 class UserModel extends User {
@@ -14,5 +13,9 @@ class UserModel extends User {
   // From JSON
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(id: json['id'], name: json['name'], email: json['email']);
+  }
+
+  User toUser() {
+    return User(id: id, name: name, email: email);
   }
 }

@@ -12,7 +12,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Icon(Icons.arrow_back_ios_new, color: Colors.deepPurple),
+            IconButton(
+              icon: const Icon(Icons.arrow_back_ios_new),
+              color: Colors.deepPurple,
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
 
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 5),

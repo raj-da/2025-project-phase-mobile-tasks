@@ -6,6 +6,7 @@ Widget textInput({
   int maxLines = 1,
   String hintText = '',
   TextInputType inputType = TextInputType.text,
+  String invalidInputMessege = 'This Field can\'t be empty',
 }) {
   return TextFormField(
     maxLines: maxLines,
@@ -23,7 +24,7 @@ Widget textInput({
     controller: controller,
     validator: (value) {
       if (value == null || value.isEmpty) {
-        return "This Field can't be empty";
+        return invalidInputMessege;
       }
       return null;
     },

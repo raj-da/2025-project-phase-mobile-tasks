@@ -13,10 +13,17 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
 
   double formInputTypeSize = 15;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,9 +84,10 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(height: 5),
                     // Email Field
                     textInput(
-                      controller: emailController,
+                      controller: _emailController,
                       hintText: 'ex: jon.smith@email.com',
                       inputType: TextInputType.emailAddress,
+                      invalidInputMessege: 'Please enter valid email',
                     ),
 
                     const SizedBox(height: 20),
@@ -88,9 +96,10 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(height: 5),
                     // Password Field
                     textInput(
-                      controller: passwordController,
+                      controller: _passwordController,
                       hintText: '********',
                       inputType: TextInputType.visiblePassword,
+                      invalidInputMessege: 'Please enter valid password',
                     ),
                   ],
                 ),
@@ -98,8 +107,14 @@ class _LoginPageState extends State<LoginPage> {
 
               const SizedBox(height: 40),
 
-              signButton(buttonTitle: 'SIGN IN', radius: 8, onpressed: () {}),
-
+              signButton(
+                buttonTitle: 'SIGN IN',
+                radius: 8,
+                onpressed: () {
+                  _formKey.currentState!.validate();
+                },
+              ),
+              
               const Spacer(),
 
               Center(
@@ -107,7 +122,7 @@ class _LoginPageState extends State<LoginPage> {
                   padding: const EdgeInsets.only(bottom: 16),
                   child: GestureDetector(
                     onTap: () {
-                      print('don\'t have an account');
+                      Navigator.pushNamed(context, '/signUp');
                     },
                     child: RichText(
                       text: const TextSpan(

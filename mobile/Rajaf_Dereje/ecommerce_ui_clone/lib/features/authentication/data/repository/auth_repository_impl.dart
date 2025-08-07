@@ -4,9 +4,11 @@ import '../../../../core/error/exception.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/network/network_info.dart';
 import '../../../../core/success/success.dart';
+import '../../domain/entity/user.dart';
 import '../../domain/repository/auth_repository.dart';
 import '../datasource/auth_local_data_source.dart';
 import '../datasource/auth_remote_data_source.dart';
+import '../model/user_model.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthLocalDataSource authLocalDataSource;
@@ -20,7 +22,7 @@ class AuthRepositoryImpl implements AuthRepository {
   });
 
   @override
-  Future<Either<Failure, void>> logInUser({
+  Future<Either<Failure, User>> logInUser({
     required String email,
     required String password,
   }) async {
@@ -31,7 +33,8 @@ class AuthRepositoryImpl implements AuthRepository {
           password: password,
         );
         await authLocalDataSource.cacheAuthToken(authToken: token);
-        return const Right(null);
+        UserModel userModel = await authRemoteDataSource.getCurrentUser(token: token);
+        return Right(userModel.toUser());
       } on ServerException {
         return const Left(ServerFailure(messege: 'Server Error logging in'));
       } on CacheException {
