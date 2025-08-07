@@ -7,6 +7,7 @@ import 'package:ecommerce_ui_clone/features/authentication/data/datasource/auth_
 import 'package:ecommerce_ui_clone/features/authentication/data/datasource/auth_remote_data_source.dart';
 import 'package:ecommerce_ui_clone/features/authentication/data/model/user_model.dart';
 import 'package:ecommerce_ui_clone/features/authentication/data/repository/auth_repository_impl.dart';
+import 'package:ecommerce_ui_clone/features/authentication/domain/entity/user.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -32,19 +33,29 @@ void main() {
   });
 
   group('logInUser', () {
+    const id = 'testID';
+    const name = 'testName';
     const email = 'test@example.com';
     const password = '123456';
     const token = 'abc123';
 
-    test('should return void when login is successful', () async {
+    test('should return User model when login is successful', () async {
       // Arrange
       when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
       when(
         mockRemoteDataSource.logInUser(email: email, password: password),
       ).thenAnswer((_) async => token);
+
       when(
         mockLocalDataSource.cacheAuthToken(authToken: token),
       ).thenAnswer((_) async => Future.value());
+
+      when(mockRemoteDataSource.getCurrentUser(token: token)).thenAnswer((
+        _,
+      ) async {
+        final value = const UserModel(id: id, email: email, name: name);
+        return value;
+      });
 
       // Act
       final result = await repository.logInUser(
@@ -53,7 +64,7 @@ void main() {
       );
 
       // Assert
-      expect(result, const Right(null));
+      expect(result, const Right(User(id: id, email: email, name: name)));
       verify(mockRemoteDataSource.logInUser(email: email, password: password));
       verify(mockLocalDataSource.cacheAuthToken(authToken: token));
     });

@@ -8,6 +8,8 @@ import 'dart:async' as _i4;
 import 'package:dartz/dartz.dart' as _i2;
 import 'package:ecommerce_ui_clone/core/error/failures.dart' as _i5;
 import 'package:ecommerce_ui_clone/core/success/success.dart' as _i6;
+import 'package:ecommerce_ui_clone/features/authentication/domain/entity/user.dart'
+    as _i7;
 import 'package:ecommerce_ui_clone/features/authentication/domain/repository/auth_repository.dart'
     as _i3;
 import 'package:mockito/mockito.dart' as _i1;
@@ -65,7 +67,7 @@ class MockAuthRepository extends _i1.Mock implements _i3.AuthRepository {
           as _i4.Future<_i2.Either<_i5.Failure, _i6.Success>>);
 
   @override
-  _i4.Future<_i2.Either<_i5.Failure, void>> logInUser({
+  _i4.Future<_i2.Either<_i5.Failure, _i7.User>> logInUser({
     required String? email,
     required String? password,
   }) =>
@@ -74,8 +76,8 @@ class MockAuthRepository extends _i1.Mock implements _i3.AuthRepository {
               #email: email,
               #password: password,
             }),
-            returnValue: _i4.Future<_i2.Either<_i5.Failure, void>>.value(
-              _FakeEither_0<_i5.Failure, void>(
+            returnValue: _i4.Future<_i2.Either<_i5.Failure, _i7.User>>.value(
+              _FakeEither_0<_i5.Failure, _i7.User>(
                 this,
                 Invocation.method(#logInUser, [], {
                   #email: email,
@@ -84,7 +86,7 @@ class MockAuthRepository extends _i1.Mock implements _i3.AuthRepository {
               ),
             ),
           )
-          as _i4.Future<_i2.Either<_i5.Failure, void>>);
+          as _i4.Future<_i2.Either<_i5.Failure, _i7.User>>);
 
   @override
   _i4.Future<_i2.Either<_i5.Failure, _i6.Success>> logOutUser() =>
