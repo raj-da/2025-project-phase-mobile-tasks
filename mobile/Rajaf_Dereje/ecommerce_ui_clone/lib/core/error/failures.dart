@@ -44,3 +44,15 @@ class InvalidPriceFailure extends Failure {
 class InvalidIdFailure extends Failure {
   const InvalidIdFailure({super.messege = 'Invalid Id'});
 }
+
+class LogInFailure extends Failure {
+  const LogInFailure({super.messege = 'Log in failed'});
+}
+
+class LogOutFailure extends Failure {
+  const LogOutFailure({super.messege = 'Log out failed'});
+}
+
+class SignInFailure extends Failure {
+  const SignInFailure({super.messege = 'Sign in failed'});
+}
