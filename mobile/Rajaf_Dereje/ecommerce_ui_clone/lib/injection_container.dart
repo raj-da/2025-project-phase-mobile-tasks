@@ -4,6 +4,16 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'core/network/network_info.dart';
+import 'features/authentication/data/datasource/auth_local_data_source.dart';
+import 'features/authentication/data/datasource/auth_local_data_source_impl.dart';
+import 'features/authentication/data/datasource/auth_remote_data_source.dart';
+import 'features/authentication/data/datasource/auth_remote_data_source_impl.dart';
+import 'features/authentication/data/repository/auth_repository_impl.dart';
+import 'features/authentication/domain/repository/auth_repository.dart';
+import 'features/authentication/domain/usecase/log_in_usecase.dart';
+import 'features/authentication/domain/usecase/log_out_usecase.dart';
+import 'features/authentication/domain/usecase/sign_up_usecase.dart';
+import 'features/authentication/presentation/bloc/auth_bloc.dart';
 import 'features/product/data/datasources/product_local_data_source.dart';
 import 'features/product/data/datasources/product_local_data_source_impl.dart';
 import 'features/product/data/datasources/product_remote_data_source.dart';
@@ -20,7 +30,7 @@ import 'features/product/presentation/bloc/product_bloc.dart';
 final sl = GetIt.instance;
 
 Future<void> init() async {
-  //! Features - Product
+  //* Features - Product
   // Bloc
   sl.registerFactory(
     () => ProductBloc(
@@ -54,6 +64,35 @@ Future<void> init() async {
   );
   sl.registerLazySingleton<ProductLocalDataSource>(
     () => ProductLocalDataSourceImpl(sharedPreferences: sl()),
+  );
+
+  //* Feature - Auth
+  // bloc
+  sl.registerFactory(
+    () =>
+        AuthBloc(logInUsecase: sl(), logOutUsecase: sl(), signUpUsecase: sl()),
+  );
+
+  // use cases
+  sl.registerLazySingleton(() => LogInUsecase(repository: sl()));
+  sl.registerLazySingleton(() => LogOutUsecase(repository: sl()));
+  sl.registerLazySingleton(() => SignUpUsecase(repository: sl()));
+
+  // Repository
+  sl.registerLazySingleton<AuthRepository>(
+    () => AuthRepositoryImpl(
+      authRemoteDataSource: sl(),
+      authLocalDataSource: sl(),
+      networkInfo: sl(),
+    ),
+  );
+
+  // Data Source
+  sl.registerLazySingleton<AuthRemoteDataSource>(
+    () => AuthRemoteDataSourceImpl(dio: sl()),
+  );
+  sl.registerLazySingleton<AuthLocalDataSource>(
+    () => AuthLocalDataSourceImpl(sharedPreferences: sl()),
   );
 
   //! Core
