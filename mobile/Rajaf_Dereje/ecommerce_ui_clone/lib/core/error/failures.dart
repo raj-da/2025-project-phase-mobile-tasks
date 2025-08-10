@@ -56,3 +56,7 @@ class LogOutFailure extends Failure {
 class SignInFailure extends Failure {
   const SignInFailure({super.messege = 'Sign in failed'});
 }
+
+class SocketConnectionFailure extends Failure {
+  const SocketConnectionFailure({super.messege = 'Socket Connection Failure'});
+}
