@@ -105,6 +105,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     SendMessageEvent event,
     Emitter<ChatState> emit,
   ) async {
+    connectSocket();
     final result = await sendMessage(
       chatId: event.chatId,
       content: event.content,

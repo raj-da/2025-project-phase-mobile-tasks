@@ -143,7 +143,7 @@ Future<void> init() async {
     () => ChatRemoteDataSourceImpl(dio: sl(), authLocalDataSource: sl()),
   );
   sl.registerLazySingleton<ChatSocketDataSource>(
-    () => ChatSocketDataSourceImpl(),
+    () => ChatSocketDataSourceImpl(authLocalDataSource: sl()),
   );
 
   //! Core
