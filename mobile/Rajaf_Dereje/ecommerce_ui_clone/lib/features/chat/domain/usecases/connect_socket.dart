@@ -9,7 +9,7 @@ class ConnectSocket {
 
   const ConnectSocket({required this.repository});
 
-  Future<Either<Failure, Success>> call({required String url}) {
-    return repository.connectToSocket(url: url);
+  Future<Either<Failure, Success>> call() {
+    return repository.connectToSocket();
   }
 }

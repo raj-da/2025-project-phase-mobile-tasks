@@ -26,7 +26,7 @@ abstract class ChatRepository {
   Future<Either<Failure, List<User>>> getUsers();
 
   // Connect to the chat socket
-  Future<Either<Failure, Success>> connectToSocket({required String url});
+  Future<Either<Failure, Success>> connectToSocket();
 
   // Disconnect from the chat socket
   Future<Either<Failure, Success>> disconnectFromSocket();

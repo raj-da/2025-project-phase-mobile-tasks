@@ -14,6 +14,19 @@ import 'features/authentication/domain/usecase/log_in_usecase.dart';
 import 'features/authentication/domain/usecase/log_out_usecase.dart';
 import 'features/authentication/domain/usecase/sign_up_usecase.dart';
 import 'features/authentication/presentation/bloc/auth_bloc.dart';
+import 'features/chat/data/datasources/chat_remote_data_source.dart';
+import 'features/chat/data/datasources/chat_remote_data_source_impl.dart';
+import 'features/chat/data/datasources/chat_socket_data_source.dart';
+import 'features/chat/data/datasources/chat_socket_data_source_impl.dart';
+import 'features/chat/data/repositories/chat_repository_impl.dart';
+import 'features/chat/domain/repositories/chat_repositories.dart';
+import 'features/chat/domain/usecases/connect_socket.dart';
+import 'features/chat/domain/usecases/delete_chat.dart';
+import 'features/chat/domain/usecases/get_all_users.dart';
+import 'features/chat/domain/usecases/get_chat_messages.dart';
+import 'features/chat/domain/usecases/get_user_chats.dart';
+import 'features/chat/domain/usecases/send_message.dart';
+import 'features/chat/presentation/bloc/chat_bloc.dart';
 import 'features/product/data/datasources/product_local_data_source.dart';
 import 'features/product/data/datasources/product_local_data_source_impl.dart';
 import 'features/product/data/datasources/product_remote_data_source.dart';
@@ -93,6 +106,44 @@ Future<void> init() async {
   );
   sl.registerLazySingleton<AuthLocalDataSource>(
     () => AuthLocalDataSourceImpl(sharedPreferences: sl()),
+  );
+
+  //* Feature - Chat
+  // bloc
+  sl.registerFactory(
+    () => ChatBloc(
+      getAllUsers: sl(),
+      connectSocket: sl(),
+      deleteChat: sl(),
+      getChatMessages: sl(),
+      getUserChats: sl(),
+      sendMessage: sl(),
+    ),
+  );
+
+  // use cases
+  sl.registerLazySingleton(() => GetAllUsers(repository: sl()));
+  sl.registerLazySingleton(() => ConnectSocket(repository: sl()));
+  sl.registerLazySingleton(() => DeleteChat(repository: sl()));
+  sl.registerLazySingleton(() => GetChatMessages(repository: sl()));
+  sl.registerLazySingleton(() => GetUserChats(repository: sl()));
+  sl.registerLazySingleton(() => SendMessage(repository: sl()));
+
+  // Repository
+  sl.registerLazySingleton<ChatRepository>(
+    () => ChatRepositoryImpl(
+      remoteDataSource: sl(),
+      socketDataSource: sl(),
+      networkInfo: sl(),
+    ),
+  );
+
+  // Data Source
+  sl.registerLazySingleton<ChatRemoteDataSource>(
+    () => ChatRemoteDataSourceImpl(dio: sl(), authLocalDataSource: sl()),
+  );
+  sl.registerLazySingleton<ChatSocketDataSource>(
+    () => ChatSocketDataSourceImpl(),
   );
 
   //! Core

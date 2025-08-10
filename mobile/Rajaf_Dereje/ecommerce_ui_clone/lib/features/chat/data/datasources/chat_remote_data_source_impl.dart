@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 
 import '../../../../core/error/exception.dart';
-import '../../../authentication/data/datasource/auth_local_data_source_impl.dart';
+import '../../../authentication/data/datasource/auth_local_data_source.dart';
 import '../../../authentication/data/model/user_model.dart';
 import '../models/chat_model.dart';
 import '../models/message_model.dart';
@@ -9,7 +9,7 @@ import 'chat_remote_data_source.dart';
 
 class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
   final Dio dio;
-  final AuthLocalDataSourceImpl authLocalDataSource;
+  final AuthLocalDataSource authLocalDataSource;
 
   static const String baseUrl =
       'https://g5-flutter-learning-path-be-tvum.onrender.com/api/v3';

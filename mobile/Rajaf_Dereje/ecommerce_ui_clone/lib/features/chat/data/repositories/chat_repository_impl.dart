@@ -1,6 +1,8 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter/foundation.dart';
 
 import '../../../../core/error/failures.dart';
+import '../../../../core/network/network_info.dart';
 import '../../../../core/success/success.dart';
 import '../../../authentication/domain/entity/user.dart';
 import '../../domain/entities/chat_entity.dart';
@@ -12,38 +14,48 @@ import '../datasources/chat_socket_data_source.dart';
 class ChatRepositoryImpl implements ChatRepository {
   final ChatRemoteDataSource remoteDataSource;
   final ChatSocketDataSource socketDataSource;
+  final NetworkInfo networkInfo;
 
   ChatRepositoryImpl({
     required this.remoteDataSource,
     required this.socketDataSource,
+    required this.networkInfo,
   });
 
   @override
   Future<Either<Failure, List<User>>> getUsers() async {
-    try {
-      final String token = await remoteDataSource.getToken();
-      final users = await remoteDataSource.getAllUsers(token: token);
-      return Right(
-        users.map((e) => User(id: e.id, email: e.email, name: e.name)).toList(),
-      );
-    } catch (e) {
-      return const Left(ServerFailure(messege: 'Failed to load users'));
+    if (await networkInfo.isConnected) {
+      try {
+        final String token = await remoteDataSource.getToken();
+        final users = await remoteDataSource.getAllUsers(token: token);
+        return Right(
+          users
+              .map((e) => User(id: e.id, email: e.email, name: e.name))
+              .toList(),
+        );
+      } catch (e) {
+        return const Left(ServerFailure(messege: 'Failed to load users'));
+      }
+    } else {
+      return const Left(NetworkFailure());
     }
   }
 
   @override
-  Future<Either<Failure, Success>> connectToSocket({
-    required String url,
-  }) async {
-    try {
-      socketDataSource.connect();
-      return const Right(SocketConnectionSuccess());
-    } catch (e) {
-      return const Left(
-        SocketConnectionFailure(
-          messege: 'Failed to connect to socket server in connectToSocket',
-        ),
-      );
+  Future<Either<Failure, Success>> connectToSocket() async {
+    if (await networkInfo.isConnected) {
+      try {
+        socketDataSource.connect();
+        return const Right(SocketConnectionSuccess());
+      } catch (e) {
+        return const Left(
+          SocketConnectionFailure(
+            messege: 'Failed to connect to socket server in connectToSocket',
+          ),
+        );
+      }
+    } else {
+      return const Left(NetworkFailure());
     }
   }
 
@@ -51,52 +63,68 @@ class ChatRepositoryImpl implements ChatRepository {
   Future<Either<Failure, ChatEntity>> createChat({
     required String userId,
   }) async {
-    try {
-      final token = await remoteDataSource.getToken();
-      final chat = await remoteDataSource.initiateChat(
-        userId: userId,
-        token: token,
-      );
+    if (await networkInfo.isConnected) {
+      try {
+        final token = await remoteDataSource.getToken();
+        final chat = await remoteDataSource.initiateChat(
+          userId: userId,
+          token: token,
+        );
 
-      return Right(chat);
-    } catch (e) {
-      return const Left(ServerFailure(messege: 'Failure creating a chat'));
+        return Right(chat);
+      } catch (e) {
+        return const Left(ServerFailure(messege: 'Failure creating a chat'));
+      }
+    } else {
+      return const Left(NetworkFailure());
     }
   }
 
   @override
   Future<Either<Failure, void>> deleteChat({required String chatId}) async {
-    try {
-      final token = await remoteDataSource.getToken();
-      await remoteDataSource.deleteChat(chatId: chatId, token: token);
-      return const Right(null);
-    } catch (e) {
-      return const Left(ServerFailure(messege: 'Failure deleting chat'));
+    if (await networkInfo.isConnected) {
+      try {
+        final token = await remoteDataSource.getToken();
+        await remoteDataSource.deleteChat(chatId: chatId, token: token);
+        return const Right(null);
+      } catch (e) {
+        return const Left(ServerFailure(messege: 'Failure deleting chat'));
+      }
+    } else {
+      return const Left(NetworkFailure());
     }
   }
 
   @override
   Future<Either<Failure, Success>> disconnectFromSocket() async {
-    try {
-      socketDataSource.disconnect();
-      return const Right(
-        SocketConnectionSuccess(messege: 'Socket discoonnected successfuly'),
-      );
-    } catch (e) {
-      return const Left(
-        SocketConnectionFailure(messege: 'Failed to disconnect form socket'),
-      );
+    if (await networkInfo.isConnected) {
+      try {
+        socketDataSource.disconnect();
+        return const Right(
+          SocketConnectionSuccess(messege: 'Socket discoonnected successfuly'),
+        );
+      } catch (e) {
+        return const Left(
+          SocketConnectionFailure(messege: 'Failed to disconnect form socket'),
+        );
+      }
+    } else {
+      return const Left(NetworkFailure());
     }
   }
 
   @override
   Future<Either<Failure, List<ChatEntity>>> getChats() async {
-    try {
-      final token = await remoteDataSource.getToken();
-      final chats = await remoteDataSource.getUserChats(token: token);
-      return Right(chats);
-    } catch (e) {
-      return const Left(ServerFailure(messege: 'Failed to get chats'));
+    if (await networkInfo.isConnected) {
+      try {
+        final token = await remoteDataSource.getToken();
+        final chats = await remoteDataSource.getUserChats(token: token);
+        return Right(chats);
+      } catch (e) {
+        return const Left(ServerFailure(messege: 'Failed to get chats'));
+      }
+    } else {
+      return const Left(NetworkFailure());
     }
   }
 
@@ -104,29 +132,50 @@ class ChatRepositoryImpl implements ChatRepository {
   Future<Either<Failure, List<MessageEntity>>> getMessages({
     required String chatId,
   }) async {
-    try {
-      final token = await remoteDataSource.getToken();
+    if (await networkInfo.isConnected) {
+      try {
+        final token = await remoteDataSource.getToken();
 
-      final messages = await remoteDataSource.getChatMessages(chatId: chatId, token: token);
-      return Right(messages);
-    } catch (e) {
-      return const Left(ServerFailure(messege: 'Failed to load chat message'));
+        final messages = await remoteDataSource.getChatMessages(
+          chatId: chatId,
+          token: token,
+        );
+        return Right(messages);
+      } catch (e) {
+        return const Left(
+          ServerFailure(messege: 'Failed to load chat message'),
+        );
+      }
+    } else {
+      return const Left(NetworkFailure());
     }
   }
-  
+
   @override
-  Future<Either<Failure, void>> sendMessage({required String chatId, required content, type = 'text'}) async {
-    try {
-      socketDataSource.sendMessage(
-        chatId: chatId,
-        content: content,
-        type: type,
-      );
-      return const Right(null);
-    } catch (e) {
-      return const Left(ServerFailure(messege: 'Error sending message'));
+  Future<Either<Failure, void>> sendMessage({
+    required String chatId,
+    required content,
+    type = 'text',
+  }) async {
+    if (await networkInfo.isConnected) {
+      try {
+        socketDataSource.connect();
+        socketDataSource.sendMessage(
+          chatId: chatId,
+          content: content,
+          type: type,
+        );
+        debugPrint('#############################message sent#####################');
+        return const Right(null);
+      } catch (e) {
+        debugPrint(
+          '#############################Exception#################################',
+        );
+        debugPrint('$e');
+        return const Left(ServerFailure(messege: 'Error sending message'));
+      }
+    } else {
+      return const Left(NetworkFailure());
     }
   }
-
-  
 }
