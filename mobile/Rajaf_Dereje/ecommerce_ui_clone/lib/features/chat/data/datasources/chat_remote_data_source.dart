@@ -31,4 +31,6 @@ abstract class ChatRemoteDataSource {
     required String type,
     required String token,
   });
+
+  Future<String> getToken();
 }

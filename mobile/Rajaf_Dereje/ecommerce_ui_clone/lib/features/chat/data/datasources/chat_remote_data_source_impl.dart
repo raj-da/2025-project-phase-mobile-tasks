@@ -19,7 +19,7 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
     required this.authLocalDataSource,
   });
 
-  Future<String> _getToken() async {
+  Future<String> getToken() async {
     return await authLocalDataSource.getAuthToken();
   }
 
