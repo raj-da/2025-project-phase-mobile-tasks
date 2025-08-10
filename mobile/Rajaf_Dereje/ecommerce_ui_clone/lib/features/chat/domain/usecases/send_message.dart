@@ -1,7 +1,6 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../../core/error/failures.dart';
-import '../entities/message_entity.dart';
 import '../repositories/chat_repositories.dart';
 
 class SendMessage {
@@ -9,7 +8,7 @@ class SendMessage {
 
   const SendMessage({required this.repository});
 
-  Future<Either<Failure, void>> call({required MessageEntity message}) {
-    return repository.sendMessage(message: message);
+  Future<Either<Failure, void>> call({required String chatId, required String content, String type = 'text'}) {
+    return repository.sendMessage(chatId: chatId, content: content, type: type);
   }
 }
