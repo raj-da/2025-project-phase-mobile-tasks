@@ -20,7 +20,9 @@ class ChatSocketDataSourceImpl implements ChatSocketDataSource {
         _baseUrl,
         IO.OptionBuilder()
             .setTransports(['websocket'])
-            .setAuth({'token': token})
+            .setExtraHeaders({
+              'Authorization': 'Bearer $token', // ✅ same as Postman
+            })
             .disableAutoConnect()
             .build(),
       );
