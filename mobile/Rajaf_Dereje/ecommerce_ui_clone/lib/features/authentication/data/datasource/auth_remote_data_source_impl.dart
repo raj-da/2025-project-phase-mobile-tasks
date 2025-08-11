@@ -21,18 +21,23 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         options: Options(headers: {'Authorization': 'Bearer $token'}),
       );
 
+      // debugPrint('${response.data}');
       if (response.statusCode == 200) {
         final userJson = response.data['data'];
 
-        return UserModel(
-          id: userJson['id'],
+        final user = UserModel(
+          id: userJson['id'] ?? userJson['_id'],
           name: userJson['name'],
           email: userJson['email'],
         );
+
+        debugPrint('$user');
+        return user;
       } else {
         throw ServerException();
       }
     } catch (e) {
+      debugPrint('$e');
       throw ServerException();
     }
   }
