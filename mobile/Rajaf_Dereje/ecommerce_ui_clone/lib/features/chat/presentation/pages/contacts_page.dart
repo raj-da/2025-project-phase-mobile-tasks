@@ -21,8 +21,9 @@ class _ContactsPageState extends State<ContactsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Contacts"),
+        title: const Text('Contacts'),
         backgroundColor: Colors.blue,
+        centerTitle: true,
       ),
       body: BlocBuilder<ChatBloc, ChatState>(
         builder: (context, state) {

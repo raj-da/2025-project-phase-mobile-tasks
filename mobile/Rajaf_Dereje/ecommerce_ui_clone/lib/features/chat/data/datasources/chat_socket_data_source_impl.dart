@@ -75,4 +75,5 @@ class ChatSocketDataSourceImpl implements ChatSocketDataSource {
       callback(MessageModel.fromJson(data));
     });
   }
+  
 }

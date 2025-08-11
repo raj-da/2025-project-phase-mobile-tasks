@@ -10,6 +10,7 @@ import '../../domain/usecases/connect_socket.dart';
 import '../../domain/usecases/delete_chat.dart';
 import '../../domain/usecases/get_all_users.dart';
 import '../../domain/usecases/get_chat_messages.dart';
+import '../../domain/usecases/get_logged_user.dart';
 import '../../domain/usecases/get_user_chats.dart';
 import '../../domain/usecases/send_message.dart';
 
@@ -23,6 +24,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   final GetChatMessages getChatMessages;
   final GetUserChats getUserChats;
   final SendMessage sendMessage;
+  final GetLoggedUser getLoggedUser;
   ChatBloc({
     required this.getAllUsers,
     required this.connectSocket,
@@ -30,6 +32,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     required this.getChatMessages,
     required this.getUserChats,
     required this.sendMessage,
+    required this.getLoggedUser,
   }) : super(ChatInitial()) {
     on<LoadUsersEvent>(_onLoadUsers);
     on<ConnectSocketEvent>(_onConnectSocket);
@@ -95,9 +98,16 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   ) async {
     emit(ChatLoading());
     final result = await getUserChats();
+    final loggedUser = await getLoggedUser();
+    late final User user; //* for displaying chat names
+    loggedUser.fold(
+      (failure) => emit(ChatError(failure.messege)),
+      (res) => user = res,
+    );
+  
     result.fold(
       (failure) => emit(ChatError(failure.messege)),
-      (chats) => emit(ChatsLoaded(chats)),
+      (chats) => emit(ChatsLoaded(chats, user)),
     );
   }
 

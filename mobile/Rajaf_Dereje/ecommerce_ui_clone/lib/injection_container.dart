@@ -24,6 +24,7 @@ import 'features/chat/domain/usecases/connect_socket.dart';
 import 'features/chat/domain/usecases/delete_chat.dart';
 import 'features/chat/domain/usecases/get_all_users.dart';
 import 'features/chat/domain/usecases/get_chat_messages.dart';
+import 'features/chat/domain/usecases/get_logged_user.dart';
 import 'features/chat/domain/usecases/get_user_chats.dart';
 import 'features/chat/domain/usecases/send_message.dart';
 import 'features/chat/presentation/bloc/chat_bloc.dart';
@@ -118,6 +119,7 @@ Future<void> init() async {
       getChatMessages: sl(),
       getUserChats: sl(),
       sendMessage: sl(),
+      getLoggedUser: sl()
     ),
   );
 
@@ -128,6 +130,8 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetChatMessages(repository: sl()));
   sl.registerLazySingleton(() => GetUserChats(repository: sl()));
   sl.registerLazySingleton(() => SendMessage(repository: sl()));
+  sl.registerLazySingleton(() => GetLoggedUser(repository: sl()));
+
 
   // Repository
   sl.registerLazySingleton<ChatRepository>(
@@ -140,7 +144,7 @@ Future<void> init() async {
 
   // Data Source
   sl.registerLazySingleton<ChatRemoteDataSource>(
-    () => ChatRemoteDataSourceImpl(dio: sl(), authLocalDataSource: sl()),
+    () => ChatRemoteDataSourceImpl(dio: sl(), authLocalDataSource: sl(), authRemoteDataSource: sl()),
   );
   sl.registerLazySingleton<ChatSocketDataSource>(
     () => ChatSocketDataSourceImpl(authLocalDataSource: sl()),

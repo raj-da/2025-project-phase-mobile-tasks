@@ -14,10 +14,16 @@ abstract class ChatRepository {
   Future<Either<Failure, List<ChatEntity>>> getChats();
 
   // Send a message in a chat
-  Future<Either<Failure, void>> sendMessage({required String chatId, required content, type = 'text'});
+  Future<Either<Failure, void>> sendMessage({
+    required String chatId,
+    required content,
+    type = 'text',
+  });
 
   // Get messages for a specific chat
-  Future<Either<Failure, List<MessageEntity>>> getMessages({required String chatId});
+  Future<Either<Failure, List<MessageEntity>>> getMessages({
+    required String chatId,
+  });
 
   // Delete a chat by ID
   Future<Either<Failure, void>> deleteChat({required String chatId});
@@ -30,4 +36,7 @@ abstract class ChatRepository {
 
   // Disconnect from the chat socket
   Future<Either<Failure, Success>> disconnectFromSocket();
+
+  // Get Logged in user
+  Future<Either<Failure, User>> getLoggedUser();
 }

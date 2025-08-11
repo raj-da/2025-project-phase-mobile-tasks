@@ -33,4 +33,6 @@ abstract class ChatRemoteDataSource {
   });
 
   Future<String> getToken();
+
+  Future<UserModel> getLoggedUser();
 }

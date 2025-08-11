@@ -18,45 +18,6 @@ class _ChatListPageState extends State<ChatListPage> {
     context.read<ChatBloc>().add(LoadChatsEvent());
   }
 
-  // final List<Map<String, dynamic>> chats = [
-  //   {
-  //     "name": "Alex Linderson",
-  //     "message": "How are you today?",
-  //     "time": "2 min ago",
-  //     "unread": 3,
-  //   },
-  //   {
-  //     "name": "Team Align",
-  //     "message": "Don't miss to attend the meeting.",
-  //     "time": "2 min ago",
-  //     "unread": 4,
-  //   },
-  //   {
-  //     "name": "John Ahraham",
-  //     "message": "Hey! Can you join the meeting?",
-  //     "time": "2 min ago",
-  //     "unread": 0,
-  //   },
-  //   {
-  //     "name": "Sabila Sayma",
-  //     "message": "How are you today?",
-  //     "time": "2 min ago",
-  //     "unread": 0,
-  //   },
-  //   {
-  //     "name": "John Borino",
-  //     "message": "Have a good day 🌸",
-  //     "time": "2 min ago",
-  //     "unread": 0,
-  //   },
-  //   {
-  //     "name": "Angel Dayna",
-  //     "message": "How are you today?",
-  //     "time": "2 min ago",
-  //     "unread": 0,
-  //   },
-  // ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,8 +55,9 @@ class _ChatListPageState extends State<ChatListPage> {
                       context,
                       MaterialPageRoute(
                         builder: (_) => ChatPage(
-                          contactName: chat.user2.name,
+                          contactName: chat.user1.name != state.loggedUser.name? chat.user1.name: chat.user2.name,
                           chatId: chat.id,
+                          loggedUser: state.loggedUser.name,
                         ),
                       ),
                     );
@@ -109,74 +71,6 @@ class _ChatListPageState extends State<ChatListPage> {
             return Center(child: Text(state.message));
           }
           return const SizedBox();
-          // return ListView.builder(
-          //   itemCount: chats.length,
-          //   itemBuilder: (context, index) {
-          //     final chat = chats[index];
-          //     return ListTile(
-          //       leading: CircleAvatar(
-          //         backgroundColor: Colors.blue.shade100,
-          //         child: Text(
-          //           chat['name'][0],
-          //           style: const TextStyle(
-          //             fontWeight: FontWeight.bold,
-          //             color: Colors.black,
-          //           ),
-          //         ), // First Letter of the name
-          //       ),
-
-          //       title: Text(
-          //         chat['name'],
-          //         style: const TextStyle(fontWeight: FontWeight.bold),
-          //       ),
-
-          //       subtitle: Text(
-          //         chat['message'],
-          //         overflow: TextOverflow.ellipsis,
-          //       ),
-
-          //       trailing: Column(
-          //         mainAxisAlignment: MainAxisAlignment.center,
-          //         children: [
-          //           Text(
-          //             chat["time"],
-          //             style: const TextStyle(fontSize: 12, color: Colors.grey),
-          //           ),
-          //           if (chat["unread"] > 0)
-          //             Container(
-          //               margin: const EdgeInsets.only(top: 4),
-          //               padding: const EdgeInsets.all(6),
-          //               decoration: const BoxDecoration(
-          //                 color: Colors.blue,
-          //                 shape: BoxShape.circle,
-          //               ),
-          //               child: Text(
-          //                 chat["unread"].toString(),
-          //                 style: const TextStyle(
-          //                   color: Colors.white,
-          //                   fontSize: 12,
-          //                 ),
-          //               ),
-          //             ),
-          //         ],
-          //       ),
-
-          //       onTap: () {
-          //         // Navigator.pushNamed(
-          //         //   context,
-          //         //   '/chatPage',
-          //         //   arguments: chat['name'],
-          //         // );
-          //         Navigator.push(
-          //           context,
-          //           MaterialPageRoute(
-          //             builder: (_) => ChatPage(contactName: chat["name"]),
-          //           ),
-          //         );
-          //       },
-          //     );
-          //   },
-          // );
         },
       ),
     );

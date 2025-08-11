@@ -165,7 +165,9 @@ class ChatRepositoryImpl implements ChatRepository {
           content: content,
           type: type,
         );
-        debugPrint('#############################message sent#####################');
+        debugPrint(
+          '#############################message sent#####################',
+        );
         return const Right(null);
       } catch (e) {
         debugPrint(
@@ -176,6 +178,16 @@ class ChatRepositoryImpl implements ChatRepository {
       }
     } else {
       return const Left(NetworkFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, User>> getLoggedUser() async {
+    try {
+      final userModel = await remoteDataSource.getLoggedUser();
+      return Right(userModel.toUser());
+    } catch (e) {
+      return const Left(ServerFailure(messege: 'Unable to get logged user'));
     }
   }
 }

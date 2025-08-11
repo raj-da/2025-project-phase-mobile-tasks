@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../domain/entities/chat_entity.dart';
 import '../bloc/chat_bloc.dart';
 
 class ChatPage extends StatefulWidget {
   final String contactName;
   final String chatId;
-  const ChatPage({super.key, required this.contactName, required this.chatId});
+  final String loggedUser;
+  const ChatPage({super.key, required this.contactName, required this.chatId, required this.loggedUser});
 
   @override
   State<ChatPage> createState() => _ChatPageState();
@@ -74,29 +74,6 @@ class _ChatPageState extends State<ChatPage> {
                 }
 
                 return const SizedBox();
-                // return ListView.builder(
-                //   padding: const EdgeInsets.all(10),
-                //   itemCount: message.length,
-                //   itemBuilder: (context, index) {
-                //     final msg = message[index];
-                //     return Align(
-                //       alignment: Alignment.centerRight,
-                //       child: Container(
-                //         margin: const EdgeInsets.symmetric(vertical: 4),
-                //         padding: const EdgeInsets.all(10),
-                //         decoration: BoxDecoration(
-                //           color: Colors.blue,
-                //           borderRadius: BorderRadius.circular(12),
-                //         ),
-
-                //         child: Text(
-                //           msg,
-                //           style: const TextStyle(color: Colors.white),
-                //         ),
-                //       ),
-                //     );
-                //   },
-                // );
               },
             ),
           ),

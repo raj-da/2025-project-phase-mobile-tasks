@@ -21,7 +21,8 @@ class UsersLoaded extends ChatState {
 
 class ChatsLoaded extends ChatState {
   final List<ChatEntity> chats;
-  const ChatsLoaded(this.chats);
+  final User loggedUser;
+  const ChatsLoaded(this.chats, this.loggedUser);
   @override
   List<Object> get props => [chats];
 }
@@ -68,7 +69,7 @@ class ChatError extends ChatState {
 class SocketConnected extends ChatState {
   final String message;
   const SocketConnected(this.message);
-  
+
   @override
   List<Object> get props => [message];
 }
