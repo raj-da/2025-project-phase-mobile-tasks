@@ -65,14 +65,28 @@ class ChatRepositoryImpl implements ChatRepository {
   }) async {
     if (await networkInfo.isConnected) {
       try {
+        debugPrint('##################before getting token##################');
         final token = await remoteDataSource.getToken();
+        debugPrint(
+          '##################before getting chat token##################',
+        );
+
+        debugPrint('User id: $userId');
+        debugPrint('token: $token ');
+
         final chat = await remoteDataSource.initiateChat(
           userId: userId,
           token: token,
         );
 
+         debugPrint(
+          '##################after getting chat token##################',
+        );
+        
+
         return Right(chat);
       } catch (e) {
+        debugPrint('$e');
         return const Left(ServerFailure(messege: 'Failure creating a chat'));
       }
     } else {

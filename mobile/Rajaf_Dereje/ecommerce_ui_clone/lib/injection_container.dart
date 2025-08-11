@@ -21,6 +21,7 @@ import 'features/chat/data/datasources/chat_socket_data_source_impl.dart';
 import 'features/chat/data/repositories/chat_repository_impl.dart';
 import 'features/chat/domain/repositories/chat_repositories.dart';
 import 'features/chat/domain/usecases/connect_socket.dart';
+import 'features/chat/domain/usecases/create_chat.dart';
 import 'features/chat/domain/usecases/delete_chat.dart';
 import 'features/chat/domain/usecases/get_all_users.dart';
 import 'features/chat/domain/usecases/get_chat_messages.dart';
@@ -119,7 +120,8 @@ Future<void> init() async {
       getChatMessages: sl(),
       getUserChats: sl(),
       sendMessage: sl(),
-      getLoggedUser: sl()
+      getLoggedUser: sl(),
+      createChat: sl(),
     ),
   );
 
@@ -131,6 +133,8 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetUserChats(repository: sl()));
   sl.registerLazySingleton(() => SendMessage(repository: sl()));
   sl.registerLazySingleton(() => GetLoggedUser(repository: sl()));
+  sl.registerLazySingleton(() => CreateChat(repository: sl()));
+
 
 
   // Repository

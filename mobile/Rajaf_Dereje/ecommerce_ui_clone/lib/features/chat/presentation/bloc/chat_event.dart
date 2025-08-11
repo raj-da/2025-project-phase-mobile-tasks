@@ -65,3 +65,11 @@ class MessageReceivedEvent extends ChatEvent {
   @override
   List<Object> get props => [message];
 }
+
+class StartChatEvent extends ChatEvent {
+  final String userId;
+  const StartChatEvent(this.userId);
+
+  @override
+  List<Object> get props => [userId];
+}

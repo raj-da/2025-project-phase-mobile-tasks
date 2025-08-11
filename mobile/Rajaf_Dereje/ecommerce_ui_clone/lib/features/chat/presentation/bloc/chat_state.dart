@@ -36,7 +36,8 @@ class MessagesLoaded extends ChatState {
 
 class ChatCreated extends ChatState {
   final ChatEntity chat;
-  const ChatCreated(this.chat);
+  final User loggedUser;
+  const ChatCreated(this.chat, this.loggedUser);
   @override
   List<Object> get props => [chat];
 }

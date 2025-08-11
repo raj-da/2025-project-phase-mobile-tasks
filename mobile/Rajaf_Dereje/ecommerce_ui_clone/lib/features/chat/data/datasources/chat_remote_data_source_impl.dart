@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 
 import '../../../../core/error/exception.dart';
 import '../../../authentication/data/datasource/auth_local_data_source.dart';
@@ -95,17 +96,23 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
     required String token,
   }) async {
     try {
+      final data = {'userId': userId};
+      final tok = token;
       final response = await dio.post(
         '$baseUrl/chats',
         data: {'userId': userId},
         options: Options(headers: {'Authorization': 'Bearer $token'}),
       );
+      debugPrint('${data}');
+      debugPrint('$tok');
+      debugPrint('{$response.statusCode}');
       if (response.statusCode == 201) {
         return ChatModel.fromJson(response.data['data']);
       } else {
         throw ServerException();
       }
     } catch (e) {
+      debugPrint('$e');
       throw ServerException();
     }
   }

@@ -7,6 +7,7 @@ import '../../../authentication/domain/entity/user.dart';
 import '../../domain/entities/chat_entity.dart';
 import '../../domain/entities/message_entity.dart';
 import '../../domain/usecases/connect_socket.dart';
+import '../../domain/usecases/create_chat.dart';
 import '../../domain/usecases/delete_chat.dart';
 import '../../domain/usecases/get_all_users.dart';
 import '../../domain/usecases/get_chat_messages.dart';
@@ -25,6 +26,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   final GetUserChats getUserChats;
   final SendMessage sendMessage;
   final GetLoggedUser getLoggedUser;
+  final CreateChat createChat;
   ChatBloc({
     required this.getAllUsers,
     required this.connectSocket,
@@ -33,6 +35,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     required this.getUserChats,
     required this.sendMessage,
     required this.getLoggedUser,
+    required this.createChat,
   }) : super(ChatInitial()) {
     on<LoadUsersEvent>(_onLoadUsers);
     on<ConnectSocketEvent>(_onConnectSocket);
@@ -42,6 +45,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     on<SendMessageEvent>(_onSendMessage);
     on<MessageDeliveredEvent>(_onMessageDelivered);
     on<MessageReceivedEvent>(_onMessageReceived);
+    on<CreateChatEvent>(_onCreateChat);
   }
 
   FutureOr<void> _onLoadUsers(
@@ -104,7 +108,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       (failure) => emit(ChatError(failure.messege)),
       (res) => user = res,
     );
-  
+
     result.fold(
       (failure) => emit(ChatError(failure.messege)),
       (chats) => emit(ChatsLoaded(chats, user)),
@@ -139,5 +143,23 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     Emitter<ChatState> emit,
   ) {
     emit(MessageReceived(event.message));
+  }
+
+  FutureOr<void> _onCreateChat(
+    CreateChatEvent event,
+    Emitter<ChatState> emit,
+  ) async {
+    emit(ChatLoading());
+    final result = await createChat(userId: event.userId);
+    final loggedUser = await getLoggedUser();
+    late final User user; //* for displaying chat names
+    loggedUser.fold(
+      (failure) => emit(ChatError(failure.messege)),
+      (res) => user = res,
+    );
+    result.fold(
+      (failure) => emit(ChatError(failure.messege)),
+      (chat) => emit(ChatCreated(chat, user)),
+    );
   }
 }
