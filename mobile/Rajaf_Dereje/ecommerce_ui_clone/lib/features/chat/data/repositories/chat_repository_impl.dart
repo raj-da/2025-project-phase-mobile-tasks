@@ -34,6 +34,7 @@ class ChatRepositoryImpl implements ChatRepository {
               .toList(),
         );
       } catch (e) {
+        debugPrint('$e');
         return const Left(ServerFailure(messege: 'Failed to load users'));
       }
     } else {
