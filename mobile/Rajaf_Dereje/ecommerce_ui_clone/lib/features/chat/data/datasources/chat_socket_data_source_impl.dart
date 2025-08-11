@@ -42,6 +42,9 @@ class ChatSocketDataSourceImpl implements ChatSocketDataSource {
       });
 
       _socket!.on('message:delivered', (data) {
+        debugPrint(
+          '#########---------------########### message delivered ################----------------##########',
+        );
         _messageDeliveredController.add(MessageModel.fromJson(data));
       });
 

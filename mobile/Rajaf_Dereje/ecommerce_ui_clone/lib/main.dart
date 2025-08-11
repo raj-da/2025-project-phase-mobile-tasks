@@ -36,9 +36,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => di.sl<ChatBloc>()),
       ],
       child: MaterialApp(
-        initialRoute: '/chatList',
+        initialRoute: '/',
         routes: {
-          // '/': (context) => const SplashScreen(),
+          '/': (context) => const SplashScreen(),
           '/home': (context) => const HomePage(),
           '/addUpdate': (context) => const AddUpdatePage(),
           '/details': (context) => const DetailsPage(),
