@@ -62,185 +62,193 @@ class _SignUpPageState extends State<SignUpPage> {
           ScaffoldMessenger.of(
             context,
           ).showSnackBar(SnackBar(content: Text(state.messege)));
+        } else if (state is SignUpSucssesState) {
+          if (_isDialogShown) {
+            Navigator.of(context).pop();
+          }
+          Navigator.pushNamed(context, '/login');
         }
       },
       child: Scaffold(
+        resizeToAvoidBottomInset: true, // ✅ allow layout to adjust for keyboard
         appBar: const CustomAppBar(),
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const SizedBox(height: 20),
+            child: SingleChildScrollView(
+              // ✅ make it scrollable when keyboard appears
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const SizedBox(height: 20),
 
-                const Text(
-                  'Create your account',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
-                ),
-
-                const SizedBox(height: 32),
-                Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      customText(text: 'Name', size: formInputNameSize),
-                      const SizedBox(height: 5),
-                      // Email Field
-                      textInput(
-                        controller: _nameController,
-                        hintText: 'ex: jon smith',
-                        inputType: TextInputType.emailAddress,
-                        invalidInputMessege: 'Please enter a valid name',
-                      ),
-
-                      const SizedBox(height: 10),
-
-                      customText(text: 'Email', size: formInputNameSize),
-                      const SizedBox(height: 5),
-                      textInput(
-                        controller: _emailController,
-                        hintText: 'ex: jon.smith@gmail.com',
-                        inputType: TextInputType.emailAddress,
-                        invalidInputMessege: 'please enter a valid email',
-                      ),
-
-                      const SizedBox(height: 10),
-
-                      customText(text: 'Password', size: formInputNameSize),
-                      const SizedBox(height: 5),
-                      // Password Field
-                      textInput(
-                        controller: _passwordController,
-                        hintText: '********',
-                        inputType: TextInputType.visiblePassword,
-                        invalidInputMessege: 'Please enter a valid password',
-                      ),
-
-                      const SizedBox(height: 10),
-
-                      customText(
-                        text: 'Confirm password',
-                        size: formInputNameSize,
-                      ),
-                      const SizedBox(height: 5),
-                      // Password Field
-                      textInput(
-                        controller: _confirmPasswordController,
-                        hintText: '********',
-                        inputType: TextInputType.visiblePassword,
-                        invalidInputMessege: 'Please enter your password again',
-                      ),
-
-                      const SizedBox(height: 5),
-
-                      Row(
-                        children: [
-                          Checkbox(
-                            value: _isChecked,
-                            onChanged: (bool? value) {
-                              setState(() {
-                                _isChecked = value!;
-                              });
-                            },
-                          ),
-
-                          RichText(
-                            text: const TextSpan(
-                              text: 'I understood the  ',
-                              style: TextStyle(
-                                color: Color.fromARGB(255, 5, 5, 5),
-                                fontSize: 14,
-                              ),
-                              children: [
-                                TextSpan(
-                                  text: 'Term & policy',
-                                  style: TextStyle(
-                                    color: Colors.deepPurple,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                  const Text(
+                    'Create your account',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
                   ),
-                ),
 
-                const SizedBox(height: 5),
-                signButton(
-                  buttonTitle: 'SIGN UP',
-                  radius: 8,
-                  onpressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      final password = _passwordController.text.trim();
-                      final confirmPassword = _confirmPasswordController.text
-                          .trim();
-
-                      if (password != confirmPassword) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Passwords do not match'),
-                          ),
-                        );
-                        return;
-                      }
-
-                      if (!_isChecked) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Please agree to the Terms & Policy'),
-                          ),
-                        );
-                        return;
-                      }
-
-                      // Dispatch SignupRequested event
-                      context.read<AuthBloc>().add(
-                        SignUpRequested(
-                          name: _nameController.text.trim(),
-                          email: _emailController.text.trim(),
-                          password: password,
+                  const SizedBox(height: 32),
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        customText(text: 'Name', size: formInputNameSize),
+                        const SizedBox(height: 5),
+                        textInput(
+                          controller: _nameController,
+                          hintText: 'ex: jon smith',
+                          inputType: TextInputType.emailAddress,
+                          invalidInputMessege: 'Please enter a valid name',
                         ),
-                      );
-                    }
-                  },
-                ),
 
-                const Spacer(),
+                        const SizedBox(height: 10),
 
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(context, '/login');
-                      },
-                      child: RichText(
-                        text: const TextSpan(
-                          text: 'have an account? ',
-                          style: TextStyle(color: Colors.grey, fontSize: 14),
+                        customText(text: 'Email', size: formInputNameSize),
+                        const SizedBox(height: 5),
+                        textInput(
+                          controller: _emailController,
+                          hintText: 'ex: jon.smith@gmail.com',
+                          inputType: TextInputType.emailAddress,
+                          invalidInputMessege: 'please enter a valid email',
+                        ),
+
+                        const SizedBox(height: 10),
+
+                        customText(text: 'Password', size: formInputNameSize),
+                        const SizedBox(height: 5),
+                        textInput(
+                          controller: _passwordController,
+                          hintText: '********',
+                          inputType: TextInputType.visiblePassword,
+                          invalidInputMessege: 'Please enter a valid password',
+                        ),
+
+                        const SizedBox(height: 10),
+
+                        customText(
+                          text: 'Confirm password',
+                          size: formInputNameSize,
+                        ),
+                        const SizedBox(height: 5),
+                        textInput(
+                          controller: _confirmPasswordController,
+                          hintText: '********',
+                          inputType: TextInputType.visiblePassword,
+                          invalidInputMessege:
+                              'Please enter your password again',
+                        ),
+
+                        const SizedBox(height: 5),
+
+                        Row(
                           children: [
-                            TextSpan(
-                              text: 'SIGN IN',
-                              style: TextStyle(
-                                color: Colors.deepPurple,
-                                fontWeight: FontWeight.bold,
+                            Checkbox(
+                              value: _isChecked,
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  _isChecked = value!;
+                                });
+                              },
+                            ),
+                            RichText(
+                              text: const TextSpan(
+                                text: 'I understood the  ',
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 5, 5, 5),
+                                  fontSize: 14,
+                                ),
+                                children: [
+                                  TextSpan(
+                                    text: 'Term & policy',
+                                    style: TextStyle(
+                                      color: Colors.deepPurple,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
                         ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 5),
+                  signButton(
+                    buttonTitle: 'SIGN UP',
+                    radius: 8,
+                    onpressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        final password = _passwordController.text.trim();
+                        final confirmPassword = _confirmPasswordController.text
+                            .trim();
+
+                        if (password != confirmPassword) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Passwords do not match'),
+                            ),
+                          );
+                          return;
+                        }
+
+                        if (!_isChecked) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                'Please agree to the Terms & Policy',
+                              ),
+                            ),
+                          );
+                          return;
+                        }
+
+                        // Dispatch SignupRequested event
+                        context.read<AuthBloc>().add(
+                          SignUpRequested(
+                            name: _nameController.text.trim(),
+                            email: _emailController.text.trim(),
+                            password: password,
+                          ),
+                        );
+                      }
+                    },
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, '/login');
+                        },
+                        child: RichText(
+                          text: const TextSpan(
+                            text: 'have an account? ',
+                            style: TextStyle(color: Colors.grey, fontSize: 14),
+                            children: [
+                              TextSpan(
+                                text: 'SIGN IN',
+                                style: TextStyle(
+                                  color: Colors.deepPurple,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ),
 
-                const Spacer(),
-              ],
+                  const SizedBox(height: 20),
+                ],
+              ),
             ),
           ),
         ),

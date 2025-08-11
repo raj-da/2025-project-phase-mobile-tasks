@@ -48,7 +48,7 @@ class AuthRepositoryImpl implements AuthRepository {
           token: token,
         );
         debugPrint('###############get cuurent was ended##############');
-        
+
         return Right(userModel.toUser());
       } on ServerException {
         return const Left(ServerFailure(messege: 'Server Error logging in'));

@@ -19,3 +19,9 @@ class LogOutSuccess extends Success {
 class SignUpSucess extends Success {
   const SignUpSucess({super.messege = 'Sign Up successful'});
 }
+
+class SocketConnectionSuccess extends Success {
+  const SocketConnectionSuccess({
+    super.messege = 'Socket Connection Successflu',
+  });
+}

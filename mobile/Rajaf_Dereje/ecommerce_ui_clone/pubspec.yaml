@@ -51,6 +51,9 @@ dependencies:
   # For dependency injection
   get_it: ^7.7.0
   mime: ^2.0.0
+
+  socket_io_client: ^3.1.2
+
  
 
 dev_dependencies:
