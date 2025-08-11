@@ -74,6 +74,5 @@ class StartChatEvent extends ChatEvent {
   List<Object> get props => [userId];
 }
 
-// chat_event.dart
-// ...
+
 class StartMessageListenersEvent extends ChatEvent {}

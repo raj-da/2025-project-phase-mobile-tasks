@@ -53,11 +53,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     on<LoadMessagesEvent>(_onLoadMessages);
     on<LoadChatsEvent>(_onLoadChats);
     on<SendMessageEvent>(_onSendMessage);
-    // on<MessageDeliveredEvent>(_onMessageDelivered);
-    // on<MessageReceivedEvent>(_onMessageReceived);
     on<CreateChatEvent>(_onCreateChat);
 
-    // 2. SETUP THE HANDLERS FOR LISTENING
     on<StartMessageListenersEvent>(_onStartMessageListeners);
     on<MessageDeliveredEvent>(_onMessageDelivered);
     on<MessageReceivedEvent>(_onMessageReceived);
@@ -216,7 +213,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   Future<void> close() {
     _receivedMessagesSubscription?.cancel();
     _deliveredMessagesSubscription?.cancel();
-    // You might also want to call your socket disconnect here
     return super.close();
   }
 }

@@ -20,7 +20,6 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
-  // Original controllers and state are preserved. No ScrollController.
   final TextEditingController _controller = TextEditingController();
 
   @override
@@ -29,13 +28,6 @@ class _ChatPageState extends State<ChatPage> {
     // Logic is unchanged.
     context.read<ChatBloc>().add(LoadMessagesEvent(widget.chatId));
   }
-
-  // No dispose method as it was not in the original logic.
-  // @override
-  // void dispose() {
-  //   _controller.dispose();
-  //   super.dispose();
-  // }
 
   Widget _buildMessageBubble(bool isSender, String content) {
     return Align(
@@ -48,7 +40,6 @@ class _ChatPageState extends State<ChatPage> {
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
         decoration: BoxDecoration(
           color: isSender ? Colors.blue : Colors.white,
-          // A subtle shadow adds depth
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.05),
@@ -56,7 +47,6 @@ class _ChatPageState extends State<ChatPage> {
               offset: const Offset(0, 2),
             ),
           ],
-          // "Tailed" border radius is common in modern chat apps.
           borderRadius: BorderRadius.only(
             topLeft: const Radius.circular(16),
             topRight: const Radius.circular(16),
@@ -78,7 +68,6 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Visual change: Background color for better contrast with bubbles.
       backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
         // Consistent modern AppBar
@@ -92,7 +81,6 @@ class _ChatPageState extends State<ChatPage> {
           icon: const Icon(Icons.arrow_back),
         ),
         elevation: 1.0,
-        // Leading icon color is automatically handled by the systemOverlayStyle
         iconTheme: const IconThemeData(color: Colors.black54),
         // A more detailed title with an avatar
         title: Row(
@@ -123,17 +111,14 @@ class _ChatPageState extends State<ChatPage> {
       body: Column(
         children: [
           Expanded(
-            // Logic is unchanged: Kept BlocBuilder, not BlocConsumer.
             child: BlocBuilder<ChatBloc, ChatState>(
               builder: (context, state) {
-                // Logic is unchanged: The original loading state condition.
                 if (state is ChatLoading) {
                   return const Center(child: CircularProgressIndicator());
                 }
 
                 if (state is MessagesLoaded) {
                   final messages = state.messages;
-                  // Logic is unchanged: ListView is not reversed.
                   return ListView.builder(
                     padding: const EdgeInsets.symmetric(
                       vertical: 10,
@@ -144,9 +129,7 @@ class _ChatPageState extends State<ChatPage> {
                       final msg = messages[index];
                       bool isSender = msg.sender.name == widget.loggedUser;
 
-                      // The alignment logic is preserved.
                       return _buildMessageBubble(isSender, msg.content);
-                      // return Align(
                     },
                   );
                 }

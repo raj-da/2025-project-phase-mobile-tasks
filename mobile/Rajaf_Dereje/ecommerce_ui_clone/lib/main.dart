@@ -6,7 +6,6 @@ import 'features/authentication/presentation/pages/login_page.dart';
 import 'features/authentication/presentation/pages/sign_up_page.dart';
 import 'features/chat/presentation/bloc/chat_bloc.dart';
 import 'features/chat/presentation/pages/chat_list_page.dart';
-import 'features/chat/presentation/pages/chat_page.dart';
 import 'features/chat/presentation/pages/contacts_page.dart';
 import 'features/product/presentation/bloc/product_bloc.dart';
 import 'features/product/presentation/pages/add_update_page.dart';
@@ -24,7 +23,6 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -45,7 +43,6 @@ class MyApp extends StatelessWidget {
           '/login': (context) => const LoginPage(),
           '/signUp': (context) => const SignUpPage(),
           '/chatList': (context) => const ChatListPage(),
-          // '/chatpage': (context) => const ChatPage(chatId: ,),
           '/contactsPage': (context) => const ContactsPage(),
         },
         debugShowCheckedModeBanner: false,

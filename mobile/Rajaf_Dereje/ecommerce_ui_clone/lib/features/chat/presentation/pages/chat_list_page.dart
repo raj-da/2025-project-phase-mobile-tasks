@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; // Required for SystemUiOverlayStyle
+import 'package:flutter/services.dart'; 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../bloc/chat_bloc.dart';
@@ -16,18 +16,16 @@ class _ChatListPageState extends State<ChatListPage> {
   @override
   void initState() {
     super.initState();
-    // No changes to the logic, we still load chats on init.
     context.read<ChatBloc>().add(LoadChatsEvent());
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Use a slightly off-white background for better contrast with cards.
       backgroundColor: Colors.grey.shade50,
       appBar: AppBar(
         // A modern, clean AppBar style.
-        systemOverlayStyle: SystemUiOverlayStyle.dark, // Makes status bar icons dark
+        systemOverlayStyle: SystemUiOverlayStyle.dark, 
         backgroundColor: Colors.white,
         elevation: 1.0,
         title: const Text(
@@ -41,7 +39,6 @@ class _ChatListPageState extends State<ChatListPage> {
       ),
       body: BlocBuilder<ChatBloc, ChatState>(
         builder: (context, state) {
-          // Loading state remains the same, it's clear and effective.
           if (state is ChatLoading) {
             return const Center(
               child: CircularProgressIndicator(
@@ -50,10 +47,8 @@ class _ChatListPageState extends State<ChatListPage> {
             );
           }
 
-          // The main UI improvement is in the ChatsLoaded state.
           if (state is ChatsLoaded) {
             final chats = state.chats;
-            // Handle case where there are no chats
             if (chats.isEmpty) {
               return const Center(
                 child: Column(
@@ -74,19 +69,17 @@ class _ChatListPageState extends State<ChatListPage> {
                 ),
               );
             }
-            // Use ListView.separated for clean dividers between cards.
+
             return ListView.separated(
               padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),
               itemCount: chats.length,
-              separatorBuilder: (context, index) => const SizedBox(height: 4), // Spacing between cards
+              separatorBuilder: (context, index) => const SizedBox(height: 4), 
               itemBuilder: (context, index) {
                 final chat = chats[index];
-                // Determine the contact's name based on the logged-in user.
                 final contactName = chat.user1.name != state.loggedUser.name
                     ? chat.user1.name
                     : chat.user2.name;
 
-                // Using a Card for each list item gives a modern, elevated look.
                 return Card(
                   elevation: 2.0,
                   shadowColor: Colors.black.withOpacity(0.1),
@@ -112,15 +105,14 @@ class _ChatListPageState extends State<ChatListPage> {
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     subtitle: Text(
-                      'Tap to see the conversation...', // A more inviting subtitle
+                      'Tap to see the conversation...', 
                       style: TextStyle(color: Colors.grey.shade600),
                     ),
                     trailing: Icon(
-                      Icons.chevron_right_rounded, // A chevron is a common UI pattern for "enter"
+                      Icons.chevron_right_rounded, 
                       color: Colors.grey.shade400,
                       size: 28,
                     ),
-                    // The core onTap logic is preserved perfectly.
                     onTap: () {
                       Navigator.push(
                         context,
@@ -139,7 +131,6 @@ class _ChatListPageState extends State<ChatListPage> {
             );
           }
 
-          // A more user-friendly error display.
           if (state is ChatError) {
             return Center(
               child: Padding(

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'icons.dart';
 import 'text.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -50,11 +49,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               ],
             ),
 
-            // notification Icon
-            // squareIcon(
-            //   icon: Icons.notifications_none,
-            //   iconColor: const Color.fromARGB(255, 90, 87, 87),
-            // ),
             Row(
               children: [
                 IconButton(
