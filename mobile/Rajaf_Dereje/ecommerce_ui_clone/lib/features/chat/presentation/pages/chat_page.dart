@@ -7,7 +7,12 @@ class ChatPage extends StatefulWidget {
   final String contactName;
   final String chatId;
   final String loggedUser;
-  const ChatPage({super.key, required this.contactName, required this.chatId, required this.loggedUser});
+  const ChatPage({
+    super.key,
+    required this.contactName,
+    required this.chatId,
+    required this.loggedUser,
+  });
 
   @override
   State<ChatPage> createState() => _ChatPageState();
@@ -50,18 +55,24 @@ class _ChatPageState extends State<ChatPage> {
                     itemCount: messages.length,
                     itemBuilder: (context, index) {
                       final msg = messages[index];
-                      return Align(
-                        alignment: Alignment.centerRight,
-                        child: Container(
-                          margin: const EdgeInsets.symmetric(vertical: 4),
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            color: Colors.blue,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Text(
-                            msg.content,
-                            style: const TextStyle(color: Colors.white),
+                      bool isSender = msg.sender.name == widget.loggedUser;
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Align(
+                          alignment: isSender
+                              ? Alignment.centerRight
+                              : Alignment.centerLeft,
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(vertical: 4),
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: isSender ? Colors.blue : const Color.fromARGB(255, 75, 75, 75),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Text(
+                              msg.content,
+                              style: const TextStyle(color: Colors.white),
+                            ),
                           ),
                         ),
                       );
