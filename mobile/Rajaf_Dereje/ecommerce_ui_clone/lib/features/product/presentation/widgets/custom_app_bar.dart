@@ -51,9 +51,25 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
 
             // notification Icon
-            squareIcon(
-              icon: Icons.notifications_none,
-              iconColor: const Color.fromARGB(255, 90, 87, 87),
+            // squareIcon(
+            //   icon: Icons.notifications_none,
+            //   iconColor: const Color.fromARGB(255, 90, 87, 87),
+            // ),
+            Row(
+              children: [
+                IconButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/contactsPage');
+                  },
+                  icon: const Icon(Icons.contact_page),
+                ),
+                IconButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/chatList');
+                  },
+                  icon: const Icon(Icons.chat),
+                ),
+              ],
             ),
           ],
         ),

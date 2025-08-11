@@ -83,7 +83,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       if (response.statusCode == 201) {
         final userJson = response.data['data'];
         return UserModel(
-          id: userJson['id'],
+          id: userJson['id'] ?? userJson['_id'],
           name: userJson['name'],
           email: userJson['email'],
         );

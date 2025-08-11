@@ -62,6 +62,11 @@ class _SignUpPageState extends State<SignUpPage> {
           ScaffoldMessenger.of(
             context,
           ).showSnackBar(SnackBar(content: Text(state.messege)));
+        } else if (state is SignUpSucssesState) {
+          if (_isDialogShown) {
+            Navigator.of(context).pop();
+          }
+          Navigator.pushNamed(context, '/login');
         }
       },
       child: Scaffold(
