@@ -79,10 +79,9 @@ class ChatRepositoryImpl implements ChatRepository {
           token: token,
         );
 
-         debugPrint(
+        debugPrint(
           '##################after getting chat token##################',
         );
-        
 
         return Right(chat);
       } catch (e) {
@@ -203,5 +202,22 @@ class ChatRepositoryImpl implements ChatRepository {
     } catch (e) {
       return const Left(ServerFailure(messege: 'Unable to get logged user'));
     }
+  }
+
+  @override
+  Stream<MessageEntity> onMessageDelivered() {
+    // It does the same for the delivered messages stream.
+    return socketDataSource.onMessageDelivered().map(
+      (messageModel) => messageModel.toEntity(),
+    );
+  }
+
+  @override
+  Stream<MessageEntity> onMessageReceived() {
+    // This listens to the socket data source's stream of models
+    // and converts each model into an entity.
+    return socketDataSource.onMessageReceived().map(
+      (messageModel) => messageModel.toEntity(),
+    );
   }
 }

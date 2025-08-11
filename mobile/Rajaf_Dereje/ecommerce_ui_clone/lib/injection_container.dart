@@ -27,6 +27,8 @@ import 'features/chat/domain/usecases/get_all_users.dart';
 import 'features/chat/domain/usecases/get_chat_messages.dart';
 import 'features/chat/domain/usecases/get_logged_user.dart';
 import 'features/chat/domain/usecases/get_user_chats.dart';
+import 'features/chat/domain/usecases/listen_for_delivered_messages.dart';
+import 'features/chat/domain/usecases/listen_for_received_messages.dart';
 import 'features/chat/domain/usecases/send_message.dart';
 import 'features/chat/presentation/bloc/chat_bloc.dart';
 import 'features/product/data/datasources/product_local_data_source.dart';
@@ -122,6 +124,8 @@ Future<void> init() async {
       sendMessage: sl(),
       getLoggedUser: sl(),
       createChat: sl(),
+      listenForDeliveredMessages: sl(),
+      listenForReceivedMessages: sl(),
     ),
   );
 
@@ -134,6 +138,10 @@ Future<void> init() async {
   sl.registerLazySingleton(() => SendMessage(repository: sl()));
   sl.registerLazySingleton(() => GetLoggedUser(repository: sl()));
   sl.registerLazySingleton(() => CreateChat(repository: sl()));
+  sl.registerLazySingleton(() => ListenForDeliveredMessages(repository: sl()));
+  sl.registerLazySingleton(() => ListenForReceivedMessages(repository: sl()));
+
+
 
 
 

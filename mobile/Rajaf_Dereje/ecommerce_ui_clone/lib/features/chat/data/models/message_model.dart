@@ -30,4 +30,14 @@ class MessageModel extends MessageEntity {
       type: message.type,
     );
   }
+
+  MessageEntity toEntity() {
+    return MessageEntity(
+      id: id,
+      chat: chat,
+      sender: sender,
+      content: content,
+      type: type,
+    );
+  }
 }

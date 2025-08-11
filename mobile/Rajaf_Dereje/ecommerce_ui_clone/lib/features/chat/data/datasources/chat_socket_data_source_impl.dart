@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/rendering.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import '../../../authentication/data/datasource/auth_local_data_source.dart';
@@ -8,6 +10,11 @@ class ChatSocketDataSourceImpl implements ChatSocketDataSource {
   late IO.Socket _socket;
   final String _baseUrl = 'wss://g5-flutter-learning-path-be-tvum.onrender.com';
   final AuthLocalDataSource authLocalDataSource;
+
+  // create StreamControllers
+  final _messageReceivedController = StreamController<MessageModel>.broadcast();
+  final _messageDeliveredController =
+      StreamController<MessageModel>.broadcast();
 
   ChatSocketDataSourceImpl({required this.authLocalDataSource});
 
@@ -26,6 +33,16 @@ class ChatSocketDataSourceImpl implements ChatSocketDataSource {
             .disableAutoConnect()
             .build(),
       );
+
+      // Set up listeners to add data to the streams
+      _socket.on('message:received', (data) {
+        _messageReceivedController.add(MessageModel.fromJson(data));
+      });
+
+      _socket.on('message:delivered', (data) {
+        _messageDeliveredController.add(MessageModel.fromJson(data));
+      });
+
       _socket.connect();
 
       _socket.onConnect((_) {
@@ -63,17 +80,18 @@ class ChatSocketDataSourceImpl implements ChatSocketDataSource {
   }
 
   @override
-  void onMessageDelivered(Function(MessageModel p1) callback) {
-    _socket.on('message:delivered', (data) {
-      callback(MessageModel.fromJson(data));
-    });
+  Stream<MessageModel> onMessageDelivered() {
+    return _messageDeliveredController.stream;
   }
 
   @override
-  void onMessageReceived(Function(MessageModel p1) callback) {
-    _socket.on('message:received', (data) {
-      callback(MessageModel.fromJson(data));
-    });
+  Stream<MessageModel> onMessageReceived() {
+    return _messageReceivedController.stream;
   }
-  
+
+  void dispose() {
+    _messageReceivedController.close();
+    _messageDeliveredController.close();
+    disconnect();
+  }
 }

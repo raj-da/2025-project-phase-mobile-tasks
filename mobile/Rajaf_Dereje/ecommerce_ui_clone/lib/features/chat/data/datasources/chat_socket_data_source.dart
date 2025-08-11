@@ -9,6 +9,6 @@ abstract class ChatSocketDataSource {
     required String type,
   });
 
-  void onMessageDelivered(Function(MessageModel) callback);
-  void onMessageReceived(Function(MessageModel) callback);
+  Stream<MessageModel> onMessageDelivered();
+  Stream<MessageModel> onMessageReceived();
 }

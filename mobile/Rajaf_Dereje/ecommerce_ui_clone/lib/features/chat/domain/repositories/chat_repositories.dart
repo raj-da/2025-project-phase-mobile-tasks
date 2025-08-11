@@ -39,4 +39,7 @@ abstract class ChatRepository {
 
   // Get Logged in user
   Future<Either<Failure, User>> getLoggedUser();
+
+  Stream<MessageEntity> onMessageReceived();
+  Stream<MessageEntity> onMessageDelivered();
 }

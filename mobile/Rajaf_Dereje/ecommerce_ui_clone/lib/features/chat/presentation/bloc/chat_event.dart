@@ -73,3 +73,7 @@ class StartChatEvent extends ChatEvent {
   @override
   List<Object> get props => [userId];
 }
+
+// chat_event.dart
+// ...
+class StartMessageListenersEvent extends ChatEvent {}

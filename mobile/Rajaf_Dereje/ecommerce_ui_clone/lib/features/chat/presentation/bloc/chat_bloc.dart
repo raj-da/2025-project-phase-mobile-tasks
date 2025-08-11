@@ -13,6 +13,8 @@ import '../../domain/usecases/get_all_users.dart';
 import '../../domain/usecases/get_chat_messages.dart';
 import '../../domain/usecases/get_logged_user.dart';
 import '../../domain/usecases/get_user_chats.dart';
+import '../../domain/usecases/listen_for_delivered_messages.dart';
+import '../../domain/usecases/listen_for_received_messages.dart';
 import '../../domain/usecases/send_message.dart';
 
 part 'chat_event.dart';
@@ -27,6 +29,12 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   final SendMessage sendMessage;
   final GetLoggedUser getLoggedUser;
   final CreateChat createChat;
+  final ListenForDeliveredMessages listenForDeliveredMessages;
+  final ListenForReceivedMessages listenForReceivedMessages;
+
+  StreamSubscription<MessageEntity>? _receivedMessagesSubscription;
+  StreamSubscription<MessageEntity>? _deliveredMessagesSubscription;
+
   ChatBloc({
     required this.getAllUsers,
     required this.connectSocket,
@@ -36,6 +44,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     required this.sendMessage,
     required this.getLoggedUser,
     required this.createChat,
+    required this.listenForDeliveredMessages,
+    required this.listenForReceivedMessages,
   }) : super(ChatInitial()) {
     on<LoadUsersEvent>(_onLoadUsers);
     on<ConnectSocketEvent>(_onConnectSocket);
@@ -43,9 +53,37 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     on<LoadMessagesEvent>(_onLoadMessages);
     on<LoadChatsEvent>(_onLoadChats);
     on<SendMessageEvent>(_onSendMessage);
+    // on<MessageDeliveredEvent>(_onMessageDelivered);
+    // on<MessageReceivedEvent>(_onMessageReceived);
+    on<CreateChatEvent>(_onCreateChat);
+
+    // 2. SETUP THE HANDLERS FOR LISTENING
+    on<StartMessageListenersEvent>(_onStartMessageListeners);
     on<MessageDeliveredEvent>(_onMessageDelivered);
     on<MessageReceivedEvent>(_onMessageReceived);
-    on<CreateChatEvent>(_onCreateChat);
+  }
+
+  void _onStartMessageListeners(
+    StartMessageListenersEvent event,
+    Emitter<ChatState> emit,
+  ) {
+    // Cancel any old subscriptions before starting new ones
+    _receivedMessagesSubscription?.cancel();
+    _deliveredMessagesSubscription?.cancel();
+
+    // Listen for messages from others
+    _receivedMessagesSubscription = listenForReceivedMessages().listen((
+      message,
+    ) {
+      add(MessageReceivedEvent(message));
+    });
+
+    // Listen for delivery confirmation of your messages
+    _deliveredMessagesSubscription = listenForDeliveredMessages().listen((
+      message,
+    ) {
+      add(MessageDeliveredEvent(message));
+    });
   }
 
   FutureOr<void> _onLoadUsers(
@@ -135,14 +173,24 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     MessageDeliveredEvent event,
     Emitter<ChatState> emit,
   ) {
-    emit(MessageDelivered(event.message));
+    final currentState = state;
+    if (currentState is MessagesLoaded) {
+      final updatedMessages = List<MessageEntity>.from(currentState.messages)
+        ..add(event.message);
+      emit(MessagesLoaded(updatedMessages));
+    }
   }
 
   FutureOr<void> _onMessageReceived(
     MessageReceivedEvent event,
     Emitter<ChatState> emit,
   ) {
-    emit(MessageReceived(event.message));
+    final currentState = state;
+    if (currentState is MessagesLoaded) {
+      final updatedMessages = List<MessageEntity>.from(currentState.messages)
+        ..add(event.message);
+      emit(MessagesLoaded(updatedMessages));
+    }
   }
 
   FutureOr<void> _onCreateChat(
@@ -161,5 +209,14 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       (failure) => emit(ChatError(failure.messege)),
       (chat) => emit(ChatCreated(chat, user)),
     );
+  }
+
+   // 5. CLEANUP
+  @override
+  Future<void> close() {
+    _receivedMessagesSubscription?.cancel();
+    _deliveredMessagesSubscription?.cancel();
+    // You might also want to call your socket disconnect here
+    return super.close();
   }
 }
