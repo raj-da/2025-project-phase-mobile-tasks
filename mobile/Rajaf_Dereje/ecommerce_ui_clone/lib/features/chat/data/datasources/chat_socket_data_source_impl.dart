@@ -7,7 +7,7 @@ import '../models/message_model.dart';
 import 'chat_socket_data_source.dart';
 
 class ChatSocketDataSourceImpl implements ChatSocketDataSource {
-  late IO.Socket _socket;
+  IO.Socket? _socket;
   final String _baseUrl = 'wss://g5-flutter-learning-path-be-tvum.onrender.com';
   final AuthLocalDataSource authLocalDataSource;
 
@@ -22,38 +22,40 @@ class ChatSocketDataSourceImpl implements ChatSocketDataSource {
   Future<void> connect() async {
     try {
       final token = await authLocalDataSource.getAuthToken();
+      debugPrint('#################token: $token#################');
 
       _socket = IO.io(
         _baseUrl,
         IO.OptionBuilder()
             .setTransports(['websocket'])
+            .enableForceNew()
+            .enableAutoConnect()
             .setExtraHeaders({
               'Authorization': 'Bearer $token', // ✅ same as Postman
             })
-            .disableAutoConnect()
             .build(),
       );
 
       // Set up listeners to add data to the streams
-      _socket.on('message:received', (data) {
+      _socket!.on('message:received', (data) {
         _messageReceivedController.add(MessageModel.fromJson(data));
       });
 
-      _socket.on('message:delivered', (data) {
+      _socket!.on('message:delivered', (data) {
         _messageDeliveredController.add(MessageModel.fromJson(data));
       });
 
-      _socket.connect();
+      _socket!.connect();
 
-      _socket.onConnect((_) {
+      _socket!.onConnect((_) {
         debugPrint('✅ Socket connected successfully!');
       });
 
-      _socket.onConnectError((err) {
+      _socket!.onConnectError((err) {
         debugPrint('❌ Connection error: $err');
       });
 
-      _socket.onDisconnect((_) {
+      _socket!.onDisconnect((_) {
         debugPrint('🔌 Socket disconnected');
       });
     } catch (e) {
@@ -63,7 +65,7 @@ class ChatSocketDataSourceImpl implements ChatSocketDataSource {
 
   @override
   void disconnect() {
-    _socket.disconnect();
+    _socket?.disconnect();
   }
 
   @override
@@ -72,7 +74,7 @@ class ChatSocketDataSourceImpl implements ChatSocketDataSource {
     required String content,
     required String type,
   }) {
-    _socket.emit('message:send', {
+    _socket?.emit('message:send', {
       'chatId': chatId,
       'content': content,
       'type': type,
